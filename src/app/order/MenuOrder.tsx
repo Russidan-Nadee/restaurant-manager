@@ -2,8 +2,8 @@
 
 import RestaurantBrand from "@/components/RestaurantBrand";
 import { useRef, useState } from "react";
-import Image from "next/image";
-import { Armchair, Check, Minus, Plus, Send } from "lucide-react";
+import MenuItemImage from "./MenuItemImage";
+import { Armchair, Check, Plus, Send } from "lucide-react";
 import { placeOrder } from "@/lib/orders";
 import type { CartItem } from "@/lib/types";
 import type { CustomerMenuItem, DiningTable } from "./types";
@@ -23,11 +23,11 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
   const totalCents = cart.reduce((total, item) => total + Math.round(item.price * 100) * item.quantity, 0);
 
-  function changeQuantity(id: string, change: number) {
+  function addItem(id: string) {
     if (sending.current) return;
     setError("");
     setConfirmedOrder("");
-    setQuantities(current => ({ ...current, [id]: Math.max(0, (current[id] ?? 0) + change) }));
+    setQuantities(current => ({ ...current, [id]: (current[id] ?? 0) + 1 }));
   }
 
   async function submitOrder() {
@@ -68,23 +68,17 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
 
         <ul className={styles.menu} aria-label="เมนูที่เปิดขาย">
           {menu.map(item => {
-            const quantity = quantities[item.id] ?? 0;
-            const imageUrl = item.imageUrl && /^https?:\/\//i.test(item.imageUrl) ? item.imageUrl : null;
             return (
               <li key={item.id} className={styles.menuItem}>
-                {imageUrl && <Image className={styles.foodImage} src={imageUrl} alt={item.name} width={96} height={96} unoptimized />}
+                <MenuItemImage imageUrl={item.imageUrl} name={item.name} />
                 <div className={styles.dish}>
                   <h2>{item.name}</h2>
                   {item.description && <p>{item.description}</p>}
-                  <span className={styles.price}>{formatMoney(Math.round(item.price * 100))}</span>
                 </div>
-                <div className={styles.quantity} role="group" aria-label={"จำนวน " + item.name}>
-                  <button type="button" aria-label={"ลดจำนวน " + item.name} disabled={quantity === 0 || submitting} onClick={() => changeQuantity(item.id, -1)}>
-                    <Minus size={18} strokeWidth={1.75} aria-hidden="true" />
-                  </button>
-                  <span aria-live="polite" aria-atomic="true">{quantity}</span>
-                  <button type="button" aria-label={"เพิ่มจำนวน " + item.name} disabled={submitting} onClick={() => changeQuantity(item.id, 1)}>
-                    <Plus size={18} strokeWidth={1.75} aria-hidden="true" />
+                <div className={styles.cardFooter}>
+                  <span className={styles.price}>{formatMoney(Math.round(item.price * 100))}</span>
+                  <button className={styles.addToCart} type="button" aria-label={"เพิ่ม " + item.name + " ลงตะกร้า"} disabled={submitting} onClick={() => addItem(item.id)}>
+                    <Plus size={20} strokeWidth={1.75} aria-hidden="true" />
                   </button>
                 </div>
               </li>
@@ -94,7 +88,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
 
         {menu.length > 0 && <footer className={styles.summary}>
           <div>
-            <p>{itemCount} รายการ</p>
+            <p aria-live="polite" aria-atomic="true">{itemCount} รายการ</p>
             <strong>{formatMoney(totalCents)}</strong>
           </div>
           <button type="button" className={styles.submit} disabled={itemCount === 0 || submitting} onClick={submitOrder}>
