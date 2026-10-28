@@ -1,16 +1,22 @@
 {
-  "name": "table-order",
+  "name": "restaurant-manager",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "db:migrate": "node scripts/migrate.mjs",
+    "verify:neon": "node scripts/verify-neon.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.0",
-    "next": "16.2.12",
+    "@neon/config": "^1.9.5",
+    "@neon/env": "^1.6.6",
+    "@vercel/functions": "^3.10.4",
+    "next": "^16.4.3",
+    "pg": "^8.23.1",
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -19,11 +25,17 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.12",
+    "eslint-config-next": "^16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@vercel/cli-config": {
+      "zod": "^4.6.7"
+    }
   }
 }

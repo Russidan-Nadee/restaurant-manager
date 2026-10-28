@@ -3,12 +3,12 @@
     "allow": [
       "Bash(npm audit *)",
       "Bash(node -e \"let d='';process.stdin.on\\('data',c=>d+=c\\);process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\);for\\(const [k,v] of Object.entries\\(j.vulnerabilities||{}\\)\\){if\\(v.severity==='high'||v.severity==='critical'\\)console.log\\(k,v.severity,v.via.map\\(x=>typeof x==='string'?x:x.title\\).join\\('; '\\)\\)}}\\)\")",
-      "Bash(mkdir -p \"d:/Workspace/Personal/table-order/supabase\")",
+      "Bash(mkdir -p \"d:/Workspace/Personal/restaurant-manager/supabase\")",
       "Bash(echo \"exit: $?\")",
       "Bash(git check-ignore *)"
     ],
     "additionalDirectories": [
-      "d:\\Workspace\\Personal\\table-order"
+      "d:\\Workspace\\Personal\\restaurant-manager"
     ]
   }
 }

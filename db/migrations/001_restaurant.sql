@@ -1,7 +1,7 @@
--- table-order first draft schema
--- Run this in the Supabase SQL editor for a fresh project.
+-- restaurant-manager first draft schema
+-- Apply with npm run db:migrate using DATABASE_URL_UNPOOLED.
 
-create extension if not exists pgcrypto;
+-- gen_random_uuid() is built into supported PostgreSQL versions.
 
 create table restaurant_tables (
   id uuid primary key default gen_random_uuid(),
@@ -66,6 +66,10 @@ declare
   v_menu record;
   v_subtotal numeric(10,2);
 begin
+  if p_items is null or jsonb_typeof(p_items) <> 'array' then
+    raise exception 'Items must be an array';
+  end if;
+
   if jsonb_array_length(p_items) = 0 then
     raise exception 'Cart is empty';
   end if;
@@ -91,25 +95,3 @@ begin
   return v_order_id;
 end;
 $$;
-
--- RLS: stays on everywhere. Admin writes use the service-role client
--- (bypasses RLS) so no anon insert/update/delete policies exist for
--- restaurant_tables / categories / menu_items.
-alter table restaurant_tables enable row level security;
-alter table categories        enable row level security;
-alter table menu_items        enable row level security;
-alter table orders            enable row level security;
-alter table order_items       enable row level security;
-
-create policy "anon can read tables"      on restaurant_tables for select to anon using (true);
-create policy "anon can read categories"  on categories        for select to anon using (true);
-create policy "anon can read menu_items"  on menu_items        for select to anon using (true);
-create policy "anon can read orders"      on orders             for select to anon using (true);
-create policy "anon can read order_items" on order_items        for select to anon using (true);
-
-create policy "anon can insert orders"      on orders      for insert to anon with check (true);
-create policy "anon can insert order_items" on order_items for insert to anon with check (true);
-
--- Manual one-time setup after running this file (Supabase dashboard):
--- Database > Replication: enable the "orders" table for Realtime,
--- or run:  alter publication supabase_realtime add table orders;

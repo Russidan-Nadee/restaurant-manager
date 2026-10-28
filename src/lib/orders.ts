@@ -1,16 +1,15 @@
-import { getBrowserSupabase } from "@/lib/supabase/client";
 import type { CartItem } from "@/lib/types";
 
-export async function placeOrder(tableId: string, items: CartItem[]) {
-  const supabase = getBrowserSupabase();
-  const { data, error } = await supabase.rpc("place_order", {
-    p_table_id: tableId,
-    p_items: items.map((item) => ({
-      menu_item_id: item.menuItemId,
-      quantity: item.quantity,
-    })),
+export async function placeOrder(tableId: string, items: CartItem[]): Promise<string> {
+  const response = await fetch("/api/orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      tableId,
+      items: items.map(item => ({ menuItemId: item.menuItemId, quantity: item.quantity })),
+    }),
   });
-
-  if (error) throw new Error(error.message);
-  return data as string;
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "Unable to place the order.");
+  return result.id as string;
 }
