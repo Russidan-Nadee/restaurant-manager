@@ -1,0 +1,4 @@
+.brand { display: inline-flex; align-items: center; gap: 12px; color: var(--restaurant-ink); text-align: left; }
+.mark { display: grid; flex-shrink: 0; width: 46px; height: 46px; place-items: center; border-radius: 15px; background: var(--restaurant-red-soft); color: var(--restaurant-red); }
+.name { font-family: var(--font-display), var(--font-ui), sans-serif; font-size: 19px; font-weight: 750; line-height: 1.2; letter-spacing: -.035em; }
+.name strong { display: block; margin-top: 3px; color: var(--restaurant-red); font-size: 16px; font-weight: 700; letter-spacing: -.02em; }

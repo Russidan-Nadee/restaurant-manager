@@ -1,9 +1,8 @@
-# Restaurant Manager
+# Your name Restaurant
 
 Restaurant application built with Next.js App Router, TypeScript and Neon PostgreSQL.
-The current foundation includes a database-backed summary page, order API, health
-check and versioned SQL migrations. Menu/cart, kitchen and admin interfaces are
-future work.
+The current foundation includes a minimal landing page, order API, health
+check and versioned SQL migrations. Customer ordering, a read-only kitchen board and read-only admin menu/table views are included.
 
 ## Setup
 
@@ -50,3 +49,23 @@ Schema changes should be checked on a temporary Neon branch before production.
 ## Windows build compatibility
 
 The dev and build scripts use Webpack so Next.js can use its WASM fallback when Windows Application Control blocks native SWC bindings. No OS policy changes are required.
+
+## Design
+
+Follow [DESIGN.md](DESIGN.md), adapted from Scarpetta. No emoji are allowed in project-authored content. Use lucide-react for UI icons. The next proposed milestone is a customer ordering view and a kitchen view; the current landing page intentionally shows only the restaurant name.
+
+## Application routes
+
+- /order: select a real table.
+- /order/001 through /order/005: initial table ordering pages. Other three-digit table numbers work when configured in the database.
+- /kitchen: table, dish and quantity board with automatic refresh.
+- /admin: Overview dashboard with real order/menu/table counts and the latest orders.
+- /admin/menu and /admin/tables: read-only real menu/table data.
+- /admin/employees: employee page shell without mock employee records.
+- Admin links also open the customer and kitchen views. Admin data editing and authentication are not implemented yet.
+
+No menu or order mock data is included. Migration 002 creates only the five table numbers requested by the owner. No tests or builds were run for this UI iteration at the owner's request.
+
+## Cashier
+
+/cashier shows real table tiles and refreshes automatically. Its current vacant/occupied state is inferred from placed/preparing/ready orders. Opening table sessions, closing bills and recording payments are not implemented yet. See DESIGN.md for the latest Pinterest-inspired component direction, using red instead of green.
