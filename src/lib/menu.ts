@@ -1,4 +1,5 @@
 import "server-only";
+import { menuImageUrl } from "@/lib/menu-images";
 import { getDatabase } from "@/lib/db";
 import type { CustomerMenuItem, DiningTable } from "@/app/order/types";
 
@@ -24,5 +25,5 @@ export async function getAvailableMenu(): Promise<CustomerMenuItem[]> {
     "FROM menu_items m LEFT JOIN categories c ON c.id = m.category_id " +
     "WHERE m.is_active = true ORDER BY c.sort_order ASC NULLS LAST, c.name ASC, m.sort_order ASC, m.name ASC",
   );
-  return result.rows;
+  return result.rows.map(item => ({ ...item, imageUrl: menuImageUrl(item.imageUrl) }));
 }

@@ -1,0 +1,67 @@
+.title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 16px; }
+.primary, .secondary { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 18px; border: 1px solid transparent; border-radius: 24px; font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: pointer; }
+.primary { background: var(--restaurant-red); color: white; }
+.primary:hover { background: var(--restaurant-red-dark); }
+.secondary { border-color: var(--restaurant-rule); background: var(--restaurant-surface); color: var(--restaurant-ink); }
+.secondary:hover { background: var(--restaurant-paper); }
+.primary:disabled, .secondary:disabled, .editor fieldset:disabled button { opacity: .5; cursor: not-allowed; }
+.editor { margin-bottom: 28px; padding: 24px; border: 1px solid var(--restaurant-rule); border-radius: 20px; background: var(--restaurant-paper); }
+.editor h2 { margin: 0 0 20px; font-size: 18px; font-weight: 650; }
+.editor fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; max-width: 680px; }
+.fields label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; }
+.fullWidth { grid-column: 1 / -1; }
+.fields input:not([type=checkbox]):not([type=hidden]), .fields textarea { box-sizing: border-box; width: 100%; min-height: 44px; padding: 12px 14px; border: 1px solid var(--restaurant-rule); border-radius: 12px; background: white; color: var(--restaurant-ink); font: inherit; }
+.fields textarea { resize: vertical; }
+.fields .checkbox { flex-direction: row; align-items: center; gap: 10px; align-self: end; min-height: 48px; }
+.checkbox input { width: 20px; height: 20px; accent-color: var(--restaurant-red); }
+.fields input:focus-visible, .fields textarea:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 2px; }
+.fields input[type=file] { font-size: 13px; }
+.fields input[type=file]::file-selector-button { margin-right: 12px; padding: 6px 12px; border: 1px solid var(--restaurant-rule); border-radius: 20px; background: var(--restaurant-paper); color: var(--restaurant-ink); font: inherit; cursor: pointer; }
+.formActions, .rowActions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.formActions { margin-top: 24px; }
+.rowActions .secondary { padding-right: 14px; padding-left: 14px; }
+.item { display: flex; align-items: center; gap: 14px; min-width: 160px; }
+.thumbnail { flex-shrink: 0; width: 64px; height: 64px; border-radius: 12px; object-fit: cover; }
+.description { max-width: 300px; margin: 4px 0 0; color: var(--restaurant-muted); font-size: 12px; font-weight: 400; white-space: pre-wrap; overflow-wrap: anywhere; }
+.imageSelection { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+.preview { width: 160px; height: 120px; border-radius: 16px; object-fit: cover; }
+.hint { margin: 8px 0 0; color: var(--restaurant-muted); font-size: 12px; }
+.error { max-width: 680px; margin: 12px 0; color: var(--restaurant-red-dark); font-size: 13px; }
+.success { margin: 0 0 16px; font-size: 14px; }
+.textButton { padding: 4px; border: 0; background: transparent; color: var(--restaurant-red); font: inherit; text-decoration: underline; cursor: pointer; }
+@media (max-width: 760px) {
+  .editor { padding: 20px 16px; }
+  .fields { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .imageSelection { flex-wrap: wrap; }
+}
+
+.dialog { width: min(680px, calc(100% - 32px)); max-height: calc(100dvh - 48px); box-sizing: border-box; margin: auto; padding: 0; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--restaurant-rule); border-radius: 24px; background: var(--restaurant-surface); color: var(--restaurant-ink); box-shadow: 0 24px 80px #14203326; }
+.dialog::backdrop { background: #14203380; backdrop-filter: blur(3px); }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border-bottom: 1px solid var(--restaurant-rule); }
+.dialogHeader h2 { margin: 0; font-size: 20px; font-weight: 650; }
+.dialogClose { display: grid; flex-shrink: 0; place-items: center; width: 44px; height: 44px; border: 1px solid var(--restaurant-rule); border-radius: 50%; background: var(--restaurant-surface); color: var(--restaurant-muted); cursor: pointer; }
+.dialogClose:hover { background: var(--restaurant-paper); color: var(--restaurant-ink); }
+.dialogClose:disabled { opacity: .5; cursor: not-allowed; }
+.dialog .editor { margin: 0; padding: 24px; border: 0; border-radius: 0; background: var(--restaurant-surface); }
+.dialog button:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 3px; }
+@media (max-width: 760px) {
+  .dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); border-radius: 20px; }
+  .dialogHeader { padding: 16px; }
+  .dialog .editor { padding: 20px 16px; }
+}
+
+.availability { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 13px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.availabilityInput { flex-shrink: 0; width: 20px; height: 20px; margin: 0; accent-color: var(--restaurant-red); cursor: pointer; }
+.availabilityInput:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 3px; }
+.availability:has(.availabilityInput:disabled) { opacity: .6; cursor: not-allowed; }
+.availabilityInput:disabled { cursor: not-allowed; }
+
+@media (max-width: 760px) {
+  .item { min-width: 0; align-items: flex-start; gap: 12px; }
+  .item > div { min-width: 0; overflow-wrap: anywhere; }
+  .thumbnail { width: 52px; height: 52px; }
+  .description { max-width: none; }
+  .availability { gap: 8px; }
+  .fields input:not([type=checkbox]):not([type=hidden]), .fields textarea { font-size: 16px; }
+}

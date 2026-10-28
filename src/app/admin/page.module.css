@@ -77,3 +77,24 @@
 @media (max-width: 760px) {
   .collapseToggle { display: none; }
 }
+
+@media (max-width: 760px) {
+  .content { padding: 12px; }
+  .panel { padding: 20px 14px; }
+  .tableScroll:has(.responsiveTable) { overflow: visible; border: 0; border-radius: 0; }
+  .tableScroll .responsiveTable { min-width: 0; }
+  .responsiveTable { display: block; width: 100%; }
+  .responsiveTable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .responsiveTable tbody { display: grid; gap: 12px; }
+  .responsiveTable tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 14px 12px; padding: 16px; border: 1px solid var(--restaurant-rule); border-radius: 18px; background: var(--restaurant-surface); }
+  .responsiveTable th, .responsiveTable td { display: block; min-width: 0; padding: 0; border: 0; text-align: left; white-space: normal; overflow-wrap: anywhere; }
+  .responsiveTable tbody th { grid-column: 1 / -1; font-size: 16px; }
+  .responsiveTable td[data-label]::before, .responsiveTable th[data-label]::before { content: attr(data-label); display: block; margin-bottom: 4px; color: var(--restaurant-muted); font-family: var(--font-ui), sans-serif; font-size: 11px; font-weight: 400; line-height: 1.6; }
+  .responsiveTable .numeric { text-align: right; font-size: 16px; font-weight: 600; }
+  .responsiveTable .mobileActions { align-self: end; justify-self: end; }
+  .responsiveTable .mobileFull { grid-column: 1 / -1; }
+  .responsiveTable .tableNumber { grid-row: 1; font-size: 26px; }
+  .responsiveTable .orderTime { grid-row: 2; grid-column: 1; white-space: normal; }
+  .responsiveTable .orderStatus { grid-row: 2; grid-column: 2; }
+  .responsiveTable .orderItems { font-size: 14px; }
+}

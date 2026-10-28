@@ -45,7 +45,7 @@ Begin with a single restaurant and two operational views, as confirmed by the ow
 1. Customer: scan a table QR, view available dishes, choose quantities and send an order.
 2. Kitchen: read table numbers, dishes and quantities. Keep this first view free of action buttons; status controls can follow later.
 
-The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Employee. Menu and Table read real database records; Employee starts as a page shell with no mock data. The admin area links to both operational views. Data-management controls and authentication remain future work.
+The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Employee. Menu and Table read real database records; Employee starts as a page shell with no mock data. The admin area links to both operational views. Menu management supports adding/editing names, descriptions and prices, opening/closing sales, and uploading/removing menu photos. Table management and authentication remain future work.
 
 Keep checkout, payment, inventory, Excel, Google Sheets
 and LINE integrations for later milestones. Do not turn the first release into a POS suite.
@@ -66,6 +66,8 @@ Do not copy the chef photograph, restaurant collection images, location, reviews
 marketing copy or illustrations from Pinterest. Do not add nonfunctional search or promotion controls.
 Admin uses an ivory sidebar and mobile navigation header against a white main canvas.
 Sidebar navigation uses text labels without menu or brand icons; align the collapse control beside the restaurant name.
+On mobile, admin Menu, Table and Overview rows become readable cards with labels and 44px controls; retain table columns on desktop.
+Admin Table offers QR preview and PNG download for the actual configured table order URL.
 Kitchen remains easy to scan.
 Cashier shows real table tiles with explicit vacant/occupied text and red occupied accents.
 Until table sessions and billing are implemented, cashier occupancy is inferred from existing

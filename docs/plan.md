@@ -66,3 +66,24 @@ The owner requested a stronger red/white restaurant style. The homepage, custome
 - Admin links to cashier as well as order/kitchen.
 - Pinterest reference 1102537552561117698 supplies mood/component cues only: ivory background, white/beige rounded surfaces, dark navy text and red replacing olive green. No reference photos or business data are copied.
 - Tests/build were not run at the owner's request.
+
+## Admin menu editing and Neon uploads
+
+- /admin/menu now has add/edit forms for name, description, price and availability.
+- Each real menu row has edit and explicit open/close-sale controls. Menus are retained for order history.
+- Users select local JPG/PNG/WebP images up to 3 MiB, preview, replace or remove them before saving.
+- Server Actions validate inputs, use parameterized PostgreSQL writes and revalidate menu/dashboard/customer paths.
+- The existing menu_items.image_url column stores Neon object keys. No schema migration or seed is needed.
+- neon.ts declares the public-read restaurant-menu-images bucket; neon deploy provisioned it on production and pulled storage env vars into .env.
+- Images upload before DB writes. Updates lock the row and commit before removing old managed images. Cleanup failures are logged.
+- Login/authorization, category editing, hard menu deletion, a separate image CDN and automatic orphan retries are outside this change.
+- Tests/build/type checks and real upload tests were not run under the owner's existing instruction. No unit tests were added.
+
+## Mobile admin tables and customer QR
+
+- Menu, Table and recent-order tables use labeled card rows on mobile with no duplicate interactive controls.
+- Admin Table reads actual configured tables and opens a per-table native QR dialog.
+- qrcode.react renders a black/white code with a four-module quiet zone; users can download PNG or copy the link.
+- QR links use the selected website origin and /order/<table-code>. Browser origin is the default; localhost is rejected with instructions to use a public or LAN-reachable URL.
+- QR generation needs no DB change. No new dependency was required.
+- No tests/build, browser UI checks or real-device scans were run under the existing user instruction.

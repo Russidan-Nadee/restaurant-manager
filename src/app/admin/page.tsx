@@ -55,19 +55,19 @@ export default async function AdminOverviewPage() {
       <section className={styles.recentOrders}>
         <div className={styles.sectionHeading}><h2>ออร์เดอร์ล่าสุด</h2></div>
         <div className={styles.tableScroll}>
-          <table className={styles.table}>
+          <table className={[styles.table, styles.responsiveTable].join(" ")}>
             <thead><tr>
               <th scope="col">เวลา</th><th scope="col">โต๊ะ</th>
               <th scope="col">รายการอาหาร</th><th scope="col">สถานะ</th>
             </tr></thead>
             <tbody>
               {ordersResult.rows.map(order => <tr key={order.id}>
-                <td className={styles.orderTime}>{time.format(new Date(order.created_at))}</td>
-                <th scope="row" className={styles.tableNumber}>{order.table_name}</th>
-                <td><ul className={styles.orderItems}>
+                <td className={styles.orderTime} data-label="เวลา">{time.format(new Date(order.created_at))}</td>
+                <th scope="row" className={styles.tableNumber} data-label="โต๊ะ">{order.table_name}</th>
+                <td className={styles.mobileFull} data-label="รายการอาหาร"><ul className={styles.orderItems}>
                   {order.items.map((item, index) => <li key={index}><strong>{item.quantity}</strong> × {item.name}</li>)}
                 </ul></td>
-                <td className={styles.orderStatus}>{statusLabels[order.status] ?? order.status}</td>
+                <td className={styles.orderStatus} data-label="สถานะ">{statusLabels[order.status] ?? order.status}</td>
               </tr>)}
             </tbody>
           </table>

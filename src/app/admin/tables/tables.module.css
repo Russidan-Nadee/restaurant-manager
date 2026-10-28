@@ -1,0 +1,32 @@
+.tableActions, .dialogActions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px; }
+.primary, .secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; box-sizing: border-box; padding: 10px 18px; border: 1px solid transparent; border-radius: 24px; font: inherit; font-size: 13px; font-weight: 600; text-decoration: none; white-space: nowrap; cursor: pointer; }
+.primary { background: var(--restaurant-red); color: white; }
+.primary:hover { background: var(--restaurant-red-dark); }
+.secondary { border-color: var(--restaurant-rule); background: var(--restaurant-surface); color: var(--restaurant-ink); }
+.secondary:hover { background: var(--restaurant-paper); }
+.dialog { width: min(480px, calc(100% - 32px)); max-height: calc(100dvh - 48px); box-sizing: border-box; margin: auto; padding: 0; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--restaurant-rule); border-radius: 24px; background: var(--restaurant-surface); color: var(--restaurant-ink); box-shadow: 0 24px 80px #14203326; }
+.dialog::backdrop { background: #14203380; backdrop-filter: blur(3px); }
+.dialogHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 24px; border-bottom: 1px solid var(--restaurant-rule); }
+.dialogHeader h2 { margin: 0; font-size: 20px; font-weight: 650; }
+.close { display: grid; flex-shrink: 0; place-items: center; width: 44px; height: 44px; border: 1px solid var(--restaurant-rule); border-radius: 50%; background: var(--restaurant-surface); color: var(--restaurant-muted); cursor: pointer; }
+.close:hover { background: var(--restaurant-paper); }
+.dialogBody { display: grid; gap: 20px; padding: 24px; }
+.urlField { display: grid; gap: 8px; min-width: 0; font-size: 13px; }
+.urlField input { width: 100%; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--restaurant-rule); border-radius: 12px; background: white; color: var(--restaurant-ink); font: inherit; font-size: 16px; }
+.urlField input:focus-visible, .dialog button:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 3px; }
+.qrSheet { display: grid; justify-items: center; padding: 20px 12px; border: 1px solid var(--restaurant-rule); border-radius: 18px; background: white; text-align: center; }
+.brand { margin: 0; font-family: var(--font-display), sans-serif; font-size: 15px; font-weight: 700; }
+.tableCode { margin: 10px 0 8px; font-size: 24px; font-weight: 700; }
+.qrCanvas { display: block; width: min(100%, 256px) !important; height: auto !important; aspect-ratio: 1; }
+.scanHint { margin: 8px 0 0; color: var(--restaurant-muted); font-size: 13px; }
+.dialogActions { justify-content: stretch; }
+.dialogActions button { flex: 1; }
+.notice { margin: 0; padding: 16px; border-radius: 14px; background: var(--restaurant-paper); color: var(--restaurant-ink); font-size: 14px; line-height: 1.8; }
+.feedback { margin: 0; color: var(--restaurant-red-dark); font-size: 13px; }
+@media (max-width: 760px) {
+  .tableActions { justify-content: stretch; }
+  .tableActions > * { flex: 1; }
+  .dialog { width: calc(100% - 24px); max-height: calc(100dvh - 24px); border-radius: 20px; }
+  .dialogHeader { padding: 14px 16px; }
+  .dialogBody { padding: 20px 16px; }
+}
