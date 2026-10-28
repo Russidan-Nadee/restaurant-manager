@@ -168,3 +168,32 @@ Additional motion is restrained: jar hover rises 10px/scales 1.03 over.7s; testi
 ## Reusable adaptation
 
 Keep the cream/sauce contrast, serif/sans roles, authentic food photography, generous spacing, and independent depth layers when adapting the theme. Exact restaurant copy, contact details, menu prices, product names, and logo belong to the Scarpetta reference and should be replaced for another brand. New interfaces should preserve legible contrast,≥44px touch targets, semantic reading order, and keyboard navigation.
+
+## Animated landing page — 2026-10-28
+
+The owner approved replacing the name-only homepage with a complete animated
+landing page. This supersedes previous homepage-only restrictions above.
+Keep the ivory, tomato-red and navy identity, current fonts, exact display name,
+Lucide icons and no-emoji rule. Portfolio CreativeHero and AiStoryPanel supply
+motion references: floating UI cards, scroll-linked exits and a sticky four-step
+ordering story. Operational routes retain their existing behavior.
+
+The homepage introduces customer ordering, the read-only kitchen board, inferred
+cashier occupancy, admin overview, menu management and table information. Payment,
+stock, sales reports and staff authorization are clearly marked as future work.
+UI illustrations contain no fake menus, prices, orders or business metrics.
+
+The owner additionally requested a simulated map/contact section. It is visibly
+labeled as a placeholder, with no invented address, hours, phone or live location.
+Set verified public details in src/components/landing/location.ts. Copy Google
+Maps iframe src into googleMapsEmbedUrl and a full Google Maps directions URL
+into googleMapsDirectionsUrl; empty/invalid values retain the placeholder.
+Only HTTPS www.google.com/maps or maps.google.com/maps URLs are accepted.
+
+Animation uses native CSS and one requestAnimationFrame-scheduled scroll update,
+without new dependencies. Desktop scroll scenes are limited to large, tall
+viewports; mobile uses a normal document flow. Respect reduced motion, provide
+a pause control and keep content available before JavaScript loads. Pause
+continuous animation while the document is hidden.
+
+No unit tests were added or run at the owner's request for this change.

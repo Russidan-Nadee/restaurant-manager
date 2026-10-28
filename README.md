@@ -69,3 +69,17 @@ No menu or order mock data is included. Migration 002 creates only the five tabl
 ## Cashier
 
 /cashier shows real table tiles and refreshes automatically. Its current vacant/occupied state is inferred from placed/preparing/ready orders. Opening table sessions, closing bills and recording payments are not implemented yet. See DESIGN.md for the latest Pinterest-inspired component direction, using red instead of green.
+
+## Landing page and location
+
+The homepage includes an animated hero, ordering workflow, existing feature links,
+future-feature labels and a simulated location/contact section. No restaurant
+address or opening hours are invented. Edit src/components/landing/location.ts to
+add verified contact details and the Google Maps embed iframe src; keep the URL
+empty to show the labeled placeholder. Directions links appear only after a valid
+Google Maps URL is configured. Phone links require a valid tel: value.
+
+Desktop motion follows scroll; narrow or short viewports use normal page flow.
+Use the motion control to pause animations. Reduced-motion preferences are
+respected, and the homepage needs no database request or additional dependency.
+No unit tests were added or run for this change at the owner's request.
