@@ -156,3 +156,5 @@
   .reviewDialog[open] { display: block; overflow-y: auto; }
   .reviewBody { overflow: visible; }
 }
+
+.previewNotice { margin: 18px 0 0; padding: 8px 12px; border-radius: 12px; background: var(--restaurant-red-soft); color: var(--restaurant-red-dark); font-size: 12px; line-height: 1.7; }

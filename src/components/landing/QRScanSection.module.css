@@ -1,0 +1,62 @@
+.section { position: relative; padding: 100px max(24px, 6vw) 0; }
+.layout { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; max-width: 1240px; margin: 0 auto; }
+.copy { position: relative; z-index: 1; }
+.copy > p { margin-top: 24px; color: #657079; font-size: 17px; line-height: 1.95; }
+.stage { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; isolation: isolate; padding: 46px 30px 28px; }
+.halo { position: absolute; top: 50%; left: 50%; z-index: -1; width: min(540px, 115%); aspect-ratio: 1; transform: translate(-50%, -54%); border: 1px solid #c7342b18; border-radius: 50%; background: radial-gradient(circle, #c7342b0c 0%, #c7342b03 56%, transparent 70%); }
+.halo::before, .halo::after { content: ""; position: absolute; inset: 28px; border: 1px solid #c7342b12; border-radius: inherit; }
+.halo::after { inset: 65px; }
+.plate { width: min(100%, 342px); padding: 30px 30px 26px; transform: rotate(-5deg); border-radius: 24px; background: white; box-shadow: 0 30px 65px -28px #14203340, 0 4px 12px #14203308; }
+.brand { margin-bottom: 28px; color: #142033; font: 800 24px/1 var(--font-display), sans-serif; letter-spacing: -.065em; text-align: center; }
+.brand > span { display: block; margin-top: 7px; font-size: 8px; font-weight: 600; letter-spacing: .27em; text-transform: uppercase; }
+.scanner { position: relative; width: 100%; aspect-ratio: 1; }
+.code, .scanWindow { position: absolute; inset: 8px; }
+.code svg { display: block; width: 100%; height: 100%; }
+.corner { position: absolute; width: 28px; height: 28px; border: solid #c7342b; border-width: 0; }
+.corner[data-corner="tl"] { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; border-top-left-radius: 10px; }
+.corner[data-corner="tr"] { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; border-top-right-radius: 10px; }
+.corner[data-corner="bl"] { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; border-bottom-left-radius: 10px; }
+.corner[data-corner="br"] { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; border-bottom-right-radius: 10px; }
+.scanWindow { overflow: hidden; pointer-events: none; }
+.scanBeam { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transform: translateY(-90%); background: linear-gradient(to bottom, transparent 65%, #c7342b09 80%, #c7342b48 99%, #ee493e 99%); filter: drop-shadow(0 2px 5px #c7342b66); animation: scan 3.4s cubic-bezier(.45, 0, .3, 1) infinite; animation-play-state: paused; }
+.section[data-active="true"] .scanBeam { animation-play-state: running; }
+.plate > .scanLabel { margin-top: 24px; color: #142033; font: 700 13px/1.5 var(--font-display), sans-serif; letter-spacing: .15em; text-align: center; }
+.plate > .demoLabel { margin-top: 6px; color: #7e858a; font-size: 11px; text-align: center; }
+.caption { margin-top: 45px; color: #657079; font-size: 12px; line-height: 1.8; text-align: center; }
+:global([data-motion="off"]) .scanBeam { animation: none; transform: translateY(-50%); opacity: .4; }
+:global([data-page-hidden="true"]) .scanBeam { animation-play-state: paused; }
+@keyframes scan { 0%, 8% { transform: translateY(-100%); opacity: 0; } 14% { opacity: 1; } 76% { transform: translateY(0); opacity: 1; } 86%, 100% { transform: translateY(0); opacity: 0; } }
+@media (max-width: 759px) {
+  .section { padding: 65px 24px 80px; }
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .copy { text-align: center; }
+  .copy > p { margin-top: 18px; font-size: 15px; }
+  .stage { padding: 35px 18px 12px; }
+  .plate { max-width: 310px; padding: 26px 24px 24px; }
+  .caption { margin-top: 38px; font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { .scanBeam { animation: none; transform: translateY(-50%); opacity: .4; } }
+
+.copy > .lead { margin-top: 28px; color: #142033; font-size: 22px; font-weight: 600; line-height: 1.7; }
+.copy > .description { max-width: 390px; margin-top: 14px; }
+@media (max-width: 759px) { .copy > .lead { margin-top: 22px; font-size: 19px; } .copy > .description { margin-right: auto; margin-left: auto; } }
+
+.scrollRunway { height: 70svh; pointer-events: none; }
+.phoneOverlay { position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; visibility: hidden; pointer-events: none; }
+.section[data-phone-visible="true"] .phoneOverlay { visibility: visible; }
+.phoneBackdrop { position: absolute; inset: 0; background: #1420339c; backdrop-filter: blur(8px); opacity: var(--phone-reveal, 0); }
+.phone { position: relative; width: min(380px, calc(100vw - 40px), calc((100svh - 64px) * 1261 / 2611)); aspect-ratio: 1261 / 2611; opacity: var(--phone-reveal, 0); transform: translateY(calc((1 - var(--phone-reveal, 0)) * 130px)) scale(calc(.78 + var(--phone-reveal, 0) * .22)) rotate(calc((1 - var(--phone-reveal, 0)) * 5deg)); filter: drop-shadow(0 24px 50px #00000055); will-change: transform, opacity; }
+.phoneFrame { z-index: 0; object-fit: contain; pointer-events: none; user-select: none; }
+.phoneScreen { position: absolute; z-index: 1; top: 1.4554%; left: 3.6479%; width: 92.6249%; height: 97.0892%; overflow: hidden; border-radius: 16% / 7.4%; background: #f7f3eb; }
+.phoneStatus { position: relative; display: flex; justify-content: space-between; align-items: center; height: 7%; padding: 0 8%; font: 600 10px/1 var(--font-display), sans-serif; }
+.phoneStatus > span:last-child { display: flex; align-items: center; gap: 3px; }
+.phoneStatus > i { position: absolute; top: 15%; left: 35%; width: 30%; height: 54%; border-radius: 30px; background: #080808; }
+.homeIndicator { position: absolute; bottom: 1.2%; left: 34%; width: 32%; height: 4px; border-radius: 4px; background: #142033; }
+:global([data-motion="off"]) .phone { transform: none; }
+:global([data-motion="off"]) .phoneBackdrop { backdrop-filter: none; }
+@media (prefers-reduced-motion: reduce) { .phone { transform: none; } .phoneBackdrop { backdrop-filter: none; } }
+
+
+.phoneViewport { position: absolute; top: 7%; right: 0; bottom: 3%; left: 0; overflow: hidden; }
+.phoneViewport iframe { display: block; width: 393px; height: var(--preview-height, 852px); border: 0; transform: scale(var(--preview-scale, .9)); transform-origin: top left; background: #f7f3eb; }
+.section[data-phone-interactive="true"] .phoneScreen { pointer-events: auto; }

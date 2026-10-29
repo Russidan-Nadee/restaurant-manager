@@ -273,6 +273,22 @@ pages retain their actual database connections. Lint and TypeScript passed;
 no unit tests, build or browser flow were run. Review future unit-test cases with
 the owner before adding tests.
 
+
+### QR scan landing showcase
+
+The landing includes a QR placard after the website features, with a looping
+scan animation. The visibly labeled sample encodes demonstration text only.
+Scrolling past the QR reveals an iPhone mockup over a dimmed backdrop; scrolling
+back reverses it and scrolling onward hides it. There are no close buttons or
+scroll locks. The frame is the original device layer exported from the owner
+provided Lstore Graphics PSD, without its fabric background or screen artwork.
+The phone embeds /preview/order/001, reading the same active menu and table
+number as /order/001. It shares the ordering UI but uses a local confirmation
+callback with an explicit demo notice. It never calls the real order API or
+creates a table visit. The ordinary /order/001 route keeps its real submission. Motion
+pauses offscreen, on hidden tabs, with the landing pause control or reduced motion.
+
+
 ### Food add-on configuration
 
 Migration 008 enables chicken, pork, beef, shrimp and squid choices plus the

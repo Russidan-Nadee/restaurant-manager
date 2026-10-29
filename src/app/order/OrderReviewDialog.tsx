@@ -8,8 +8,9 @@ import styles from "./page.module.css";
 
 const formatMoney = (cents: number) => new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(cents / 100);
 
-export default function OrderReviewDialog({ tableNumber, items, submitting, error, trigger, onClose, onConfirm }: {
+export default function OrderReviewDialog({ tableNumber, items, submitting, error, trigger, onClose, onConfirm, preview = false }: {
   tableNumber: string;
+  preview?: boolean;
   items: CartItem[];
   submitting: boolean;
   error: string;
@@ -49,7 +50,7 @@ export default function OrderReviewDialog({ tableNumber, items, submitting, erro
       <div>
         <p>โต๊ะ {tableNumber}</p>
         <h2 id={titleId}>ตรวจสอบออร์เดอร์</h2>
-        <p id={descriptionId}>ทวนรายการก่อนส่งเข้าครัว</p>
+        <p id={descriptionId}>{preview ? "ทวนรายการตัวอย่าง ไม่มีการส่งออร์เดอร์จริง" : "ทวนรายการก่อนส่งเข้าครัว"}</p>
       </div>
       <button type="button" className={styles.reviewClose} disabled={submitting} onClick={onClose} aria-label="ปิดสรุปออร์เดอร์">
         <X size={22} strokeWidth={1.75} aria-hidden="true" />
@@ -57,7 +58,7 @@ export default function OrderReviewDialog({ tableNumber, items, submitting, erro
     </header>
     <div className={styles.reviewBody}>
       <div className={styles.reviewColumns} aria-hidden="true"><span>รายการอาหาร</span><span>จำนวน</span><span>รวม</span></div>
-      <ul className={styles.reviewList} aria-label="รายการที่จะส่งเข้าครัว">
+      <ul className={styles.reviewList} aria-label={preview ? "รายการตัวอย่างที่เลือก" : "รายการที่จะส่งเข้าครัว"}>
         {items.map(item => {
           const options = [getProteinLabel(item.protein), item.isSpecial ? "พิเศษ" : "ธรรมดา"].filter(Boolean).join(" · ");
           return <li key={JSON.stringify([item.menuItemId, item.protein ?? null, item.isSpecial === true])} className={styles.reviewLine}>

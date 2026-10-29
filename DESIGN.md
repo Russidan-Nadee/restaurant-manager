@@ -328,3 +328,30 @@ with local state, no DB/auth wiring or persistent browser storage. Use generic
 sample names and placeholder phone numbers; preserve the existing profile UI and
 mobile card layout. The no-mock-data rule continues to apply to other operational
 views. Existing employee database schema is retained without modification.
+
+
+### QR scan showcase — first stage
+
+Place the QR showcase immediately after the included website features. Use a
+white restaurant-branded QR placard with a looping tomato-red scan beam, keeping
+the current ivory/navy/red identity. Stack the composition on phones. The QR
+encodes demonstration text, not a live ordering URL, and is visibly labeled as
+a sample. After the QR reaches the center of the viewport, scrolling reveals an
+iPhone over a dimmed, blurred backdrop. Scroll position controls both entrance
+and exit in either direction. No close/replay buttons, native modal, focus trap
+or scroll lock. Use the original iPhone PSD device layer as a separate PNG, with
+an interactive iframe at /preview/order/001. It uses the actual table 001 menu
+and shared customer ordering UI, with a local-only confirmation callback. The
+demo client does not import the real order API function. Keep its demo notice
+and success copy explicit; no preview confirmation writes an order.
+Pause the beam outside the viewport, while the page is hidden and with the
+existing landing motion control. Reduced motion shows a static scan highlight.
+
+The phone fits mobile and short landscape viewports. Reduced motion and the
+landing pause control remove its translation, scale and rotation. Keep a short
+scroll runway after the QR so the device can remain visible before fading out.
+
+Use a 393px iframe viewport scaled to fit the phone so mobile menu layouts stay
+consistent. The screen becomes interactive only after the entrance completes;
+hidden or fading previews are inert and excluded from keyboard focus. Outer
+scroll still controls the phone entrance and exit, with no close button.

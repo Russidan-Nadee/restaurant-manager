@@ -4,6 +4,7 @@ import { Check, Globe2, Heart, MessageCircle, Palette, Plus, Store, UtensilsCros
 import LandingMotion from "@/components/landing/LandingMotion";
 import LocationSection from "@/components/landing/LocationSection";
 import LivePreview from "@/components/landing/LivePreview";
+import QRScanSection from "@/components/landing/QRScanSection";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -76,6 +77,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
             <div className={styles.benefitCopy} data-reveal><div><h3>{item.title}</h3><p>{item.text}</p></div></div>
           </article>)}</div>
         </section>
+
+        <QRScanSection />
 
         <section id="experience" className={styles.experience} data-story aria-labelledby="experience-title">
           <div className={styles.experienceFrame}>
