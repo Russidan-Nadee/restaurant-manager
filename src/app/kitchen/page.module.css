@@ -23,12 +23,12 @@
 .itemStatus { display: grid; gap: 5px; min-width: 0; }
 .statusLabel { width: fit-content; max-width: 100%; padding: 5px 10px; border-radius: 18px; background: var(--restaurant-paper); color: var(--restaurant-ink); font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
 .nextLabel { color: var(--restaurant-muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
-.actionForm { min-width: 0; }
+.actionForm { min-width: 0; grid-column: 4; }
 .actionButton, .terminalLabel { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; box-sizing: border-box; width: 100%; padding: 10px 14px; border: 1px solid transparent; border-radius: 24px; font: inherit; font-size: 13px; font-weight: 650; line-height: 1.4; text-align: center; }
 .actionButton { background: var(--restaurant-red); color: white; cursor: pointer; }
 .actionButton:hover:not(:disabled) { background: var(--restaurant-red-dark); }
 .actionButton:disabled { opacity: .55; cursor: not-allowed; }
-.terminalLabel { border-color: var(--restaurant-rule); background: var(--restaurant-paper); color: var(--restaurant-muted); }
+.terminalLabel { grid-column: 4; border-color: var(--restaurant-rule); background: var(--restaurant-paper); color: var(--restaurant-muted); }
 .actionSuccess, .actionError { grid-column: 1 / -1; margin: -4px 0 0; font-size: 12px; line-height: 1.6; }
 .actionSuccess { color: #477052; }
 .actionError { color: var(--restaurant-red-dark); }
@@ -65,10 +65,10 @@
   .tableGroup { border-radius: 18px; }
   .tableHeading { padding: 16px; }
   .item { grid-template-columns: minmax(0, 1fr) auto; gap: 13px 12px; padding: 16px; }
-  .itemMain { grid-column: 1 / -1; gap: 12px; }
+  .itemMain { grid-column: 1; grid-row: 1; gap: 12px; }
   .tableCode { font-size: 25px; }
   .itemCopy h3 { font-size: 17px; }
-  .itemQuantity { grid-column: 1; grid-row: 2; }
+  .itemQuantity { grid-column: 2; grid-row: 1; align-self: start; justify-items: end; text-align: right; }
   .itemStatus { grid-column: 2; grid-row: 2; justify-items: end; text-align: right; }
   .actionForm, .terminalLabel { grid-column: 1 / -1; }
   .actionForm .actionButton { width: 100%; }

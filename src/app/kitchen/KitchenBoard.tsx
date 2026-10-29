@@ -25,10 +25,9 @@ function FoodLine({ item }: { item: FoodWorkItem }) {
         <span>จำนวน</span>
         <strong>{item.quantity}</strong>
       </div>
-      <div className={styles.itemStatus}>
+      {item.statusLabel !== "รอทำ" && <div className={styles.itemStatus}>
         <span className={styles.statusLabel}>{item.statusLabel}</span>
-        {item.nextStatusLabel && <span className={styles.nextLabel}>ถัดไป: {item.nextStatusLabel}</span>}
-      </div>
+      </div>}
       {canAdvance ? (
         <form action={formAction} className={styles.actionForm} aria-busy={pending}>
           <input type="hidden" name="id" value={item.id} />
