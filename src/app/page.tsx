@@ -1,114 +1,115 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowDown, ArrowRight, ArrowUpRight, Armchair, Check, ChefHat, ClipboardList, CookingPot, LayoutDashboard, Plus, QrCode, Settings2, ShoppingBag, UtensilsCrossed } from "lucide-react";
+import { Check, Globe2, Heart, MessageCircle, Palette, Plus, Store, UtensilsCrossed } from "lucide-react";
 import LandingMotion from "@/components/landing/LandingMotion";
 import LocationSection from "@/components/landing/LocationSection";
+import LivePreview from "@/components/landing/LivePreview";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Your name Restaurant | Good food. Great flow.",
-  description: "จากเมนูบนมือถือถึงหน้าครัว เชื่อมทุกจังหวะของร้านเข้าด้วยกัน สั่งอาหาร ดูออร์เดอร์ และจัดการร้านในที่เดียว",
+  title: "รับทำเว็บไซต์ร้านอาหาร จ่ายครั้งเดียว | Your name Restaurant",
+  description: "เว็บไซต์ร้านอาหารในแบบของคุณ พร้อมเมนูบนมือถือ สั่งอาหารผ่าน QR และหลังร้านสำหรับจัดการเมนู รับทำเป็นรายร้าน ค่าทำเว็บจ่ายครั้งเดียว",
 };
 
-const steps = [
-  { title: "เริ่มที่โต๊ะของคุณ", text: "สแกน QR ประจำโต๊ะ หรือเลือกโต๊ะผ่านหน้าเว็บ เพื่อเริ่มดูเมนูของร้าน", icon: QrCode, label: "SCAN & SIT", screen: "เลือกโต๊ะของคุณ", detail: "ทุกมื้อ เริ่มต้นตรงนี้", href: "/order" },
-  { title: "เลือกจานที่อยากกิน", text: "ดูเมนูที่เปิดขาย เลือกจำนวน ตรวจรายการในตะกร้า แล้วส่งออร์เดอร์ได้จากมือถือ", icon: ShoppingBag, label: "PICK YOUR FAVOURITES", screen: "มื้อนี้ เลือกเองได้", detail: "เมนูจริงของร้าน พร้อมให้เลือก", href: "/order" },
-  { title: "ส่งตรงถึงหน้าครัว", text: "ครัวเห็นโต๊ะ รายการอาหาร และจำนวนในหน้าเดียว พร้อมอัปเดตข้อมูลอัตโนมัติ", icon: ChefHat, label: "STRAIGHT TO THE KITCHEN", screen: "ครัวรับช่วงต่อ", detail: "โต๊ะ · รายการอาหาร · จำนวน", href: "/kitchen" },
-  { title: "มองเห็นภาพทั้งร้าน", text: "ดูสถานะโต๊ะที่แคชเชียร์ และเข้าถึงภาพรวมออร์เดอร์กับเมนูจากหน้าผู้ดูแล", icon: LayoutDashboard, label: "EVERYTHING CONNECTED", screen: "ทุกจังหวะ เชื่อมกัน", detail: "หน้าร้านและหลังร้าน ในระบบเดียว", href: "/cashier" },
+const showcase = [
+  { title: "หน้าเว็บที่เป็นร้านคุณ", text: "ชื่อร้าน สี รูปอาหาร และเรื่องราว ที่ทำให้ลูกค้ารู้จักคุณตั้งแต่หน้าแรก", preview: "/?preview=1", href: "/" },
+  { title: "เมนูพร้อมให้ลูกค้าเลือก", text: "เปิดจากมือถือ เลือกอาหาร ตัวเลือก และจำนวน แล้วส่งออร์เดอร์ผ่าน QR ของโต๊ะ", preview: "/preview/menu", href: "/preview/menu" },
+  { title: "ออร์เดอร์ส่งถึงหน้าครัว", text: "เห็นโต๊ะ รายการอาหาร และจำนวนชัดเจนในหน้าเดียว", preview: "/kitchen", href: "/kitchen" },
+  { title: "หลังร้านที่ดูแลเองได้", text: "เพิ่มเมนู เปลี่ยนราคา อัปโหลดรูป และจัดการโต๊ะได้จากหลังร้าน", preview: "/admin/menu", href: "/admin/menu" },
 ];
 
-const features = [
-  { title: "เมนูอยู่ในมือคุณ", en: "THE DIGITAL MENU", description: "เลือกโต๊ะ ดูเมนูที่เปิดขาย ปรับจำนวน และส่งออร์เดอร์ผ่านตะกร้า", icon: QrCode, href: "/order", cta: "เปิดหน้าสั่งอาหาร" },
-  { title: "ครัวอ่านง่ายขึ้น", en: "THE KITCHEN BOARD", description: "รวมโต๊ะ ชื่ออาหาร และจำนวนไว้ให้อ่านได้ทันที พร้อมรีเฟรชข้อมูลอัตโนมัติ", icon: CookingPot, href: "/kitchen", cta: "เปิดหน้าครัว" },
-  { title: "ทุกโต๊ะ อยู่ในสายตา", en: "THE FLOOR VIEW", description: "ดูโต๊ะว่างและโต๊ะที่มีออร์เดอร์ค้าง สถานะอ้างอิงจากออร์เดอร์ในระบบ", icon: Armchair, href: "/cashier", cta: "เปิดหน้าแคชเชียร์" },
-  { title: "ภาพรวมที่ดูได้จริง", en: "THE DAILY OVERVIEW", description: "ดูจำนวนออร์เดอร์ เมนู โต๊ะ และรายการล่าสุดจากข้อมูลจริงของร้าน", icon: LayoutDashboard, href: "/admin", cta: "ดูภาพรวมร้าน" },
-  { title: "เมนูเปลี่ยน ร้านก็พร้อม", en: "THE MENU STUDIO", description: "เพิ่มและแก้ไขเมนู ตั้งราคา อัปโหลดรูป และเปิด–ปิดขายได้จากหลังร้าน", icon: Settings2, href: "/admin/menu", cta: "จัดการเมนู" },
-  { title: "เชื่อมจากโต๊ะถึงหลังร้าน", en: "ONE CONNECTED PLACE", description: "เข้าถึงข้อมูลโต๊ะและลิงก์หน้าสั่งอาหารของแต่ละโต๊ะจากหน้าผู้ดูแล", icon: ClipboardList, href: "/admin/tables", cta: "ดูข้อมูลโต๊ะ" },
+const audiences = [
+  { title: "ร้านที่กำลังเปิดใหม่", text: "เตรียมพื้นที่ออนไลน์ให้ลูกค้ารู้จักร้าน ตั้งแต่ก่อนเปิดประตูต้อนรับวันแรก", label: "A FRESH START", caption: "ก้าวแรกของร้าน เริ่มให้เป็นคุณ", icon: Store },
+  { title: "ร้านที่มีลูกค้าประจำแล้ว", text: "มีลิงก์ของร้านไว้ส่งต่อ ให้ลูกค้าเก่าแนะนำร้านกับคนใหม่ได้ง่ายขึ้น", label: "A LOCAL FAVOURITE", caption: "ร้านโปรด ที่ส่งต่อกันได้", icon: Heart },
+  { title: "ร้านที่ใช้โซเชียลเป็นหลัก", text: "มีพื้นที่รวมข้อมูลร้าน แล้วใช้ลิงก์เดียวเชื่อมต่อจากทุกช่องทางที่คุณใช้อยู่", label: "BEYOND THE FEED", caption: "จากหน้าโซเชียล สู่พื้นที่ของร้าน", icon: MessageCircle },
+  { title: "ร้านที่อยากให้คนจำแบรนด์ได้", text: "ถ่ายทอดบุคลิกของร้านผ่านชื่อ สี และภาพ ให้ลูกค้าจดจำร้านในแบบที่คุณตั้งใจ", label: "A BRAND OF YOUR OWN", caption: "บุคลิกของร้าน ที่มองเห็นได้", icon: Palette },
 ];
 
-
-export default function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ preview?: string | string[] }> }) {
+  const isPreview = (await searchParams).preview === "1";
   return (
     <LandingMotion>
       <a className={styles.skipLink} href="#main-content">ข้ามไปเนื้อหา</a>
       <header className={styles.header}>
         <Link href="/" className={styles.brand} aria-label="Your name Restaurant หน้าแรก"><span>Your name<span className={styles.brandDot}>.</span></span><small>Restaurant</small></Link>
         <nav className={styles.navigation} aria-label="เมนูหลัก">
-          <a href="#experience">ประสบการณ์</a><a href="#features">ฟีเจอร์</a><a href="#visit">มาหาเรา</a>
+          <a href="#features">สิ่งที่จะได้รับ</a><a href="#experience">เหมาะกับใคร</a>
         </nav>
-        <Link href="/order" prefetch={false} className={styles.headerCta}>เริ่มสั่งอาหาร <ArrowUpRight size={17} aria-hidden="true" /></Link>
+        <button type="button" className={styles.headerCta}>ติดต่อทำเว็บ</button>
       </header>
 
       <main id="main-content">
         <section className={styles.hero} data-hero aria-labelledby="hero-title">
           <div className={styles.heroGrid} aria-hidden="true" />
           <div className={styles.heroContent}>
-            <p className={styles.eyebrow}><span className={styles.statusDot} /> A LITTLE LESS WAIT. A LOT MORE TASTE.</p>
-            <h1 id="hero-title" className={styles.heroTitle} lang="en"><span>GOOD FOOD.</span><span>GREAT <span className={styles.outlineWord}>FLOW.</span></span></h1>
-            <p className={styles.heroThai}>ความอร่อยเต็มโต๊ะ<span>ทุกอย่างลงตัว</span></p>
-            <p className={styles.heroDescription}>เลือกจานโปรด ส่งตรงถึงครัว<br />เชื่อมทุกจังหวะของร้าน ให้คุณมีเวลากับมื้อดี ๆ</p>
+            <p className={styles.eyebrow}><span className={styles.statusDot} /> BUILT FOR YOUR RESTAURANT. MADE TO BE YOURS.</p>
+            <h1 id="hero-title" className={styles.heroTitle} lang="en"><span>YOUR NAME.</span><span>YOUR <span className={styles.outlineWord}>WEB.</span></span></h1>
+            <p className={styles.heroThai}>เว็บไซต์ร้านอาหาร<span>ในแบบของคุณ</span></p>
+            <p className={styles.heroDescription}>รับทำเว็บเป็นรายร้าน ใช้ชื่อ สี และภาพของร้านคุณ<br />ค่าทำเว็บจ่ายครั้งเดียว ตามขอบเขตงานที่ตกลง</p>
             <div className={styles.actions}>
-              <Link href="/order" prefetch={false} className={styles.primaryButton}>ดูเมนูและสั่งอาหาร <ArrowUpRight size={20} aria-hidden="true" /></Link>
-              <a href="#experience" className={styles.textButton}>ดูว่าทำงานอย่างไร <ArrowDown size={17} aria-hidden="true" /></a>
+              <Link href="/order" prefetch={false} className={styles.primaryButton}>ลองเว็บตัวอย่าง</Link>
+              <a href="#features" className={styles.textButton}>ดูสิ่งที่จะได้รับ</a>
             </div>
           </div>
 
           <div className={`${styles.floatingCard} ${styles.ticketPosition}`} aria-hidden="true"><div className={styles.ticket}>
-            <div className={styles.ticketTop}><UtensilsCrossed size={23} strokeWidth={1.5} /><span>MADE TO ORDER</span></div>
-            <p>ความอร่อย<br /><strong>ไม่ต้องรอนาน</strong></p><div className={styles.ticketRule} />
-            <div className={styles.ticketRow}><Check size={16} /> เลือกเมนูที่ชอบ</div><div className={styles.ticketRow}><Check size={16} /> ส่งออร์เดอร์ถึงครัว</div>
-            <div className={styles.barcode} /><small>FROM YOUR TABLE, WITH LOVE.</small>
+            <div className={styles.ticketTop}><Globe2 size={23} strokeWidth={1.5} /><span>MAKE IT YOURS</span></div>
+            <p>เว็บหนึ่งร้าน<br /><strong>ตัวตนของคุณ</strong></p><div className={styles.ticketRule} />
+            <div className={styles.ticketRow}><Check size={16} /> ชื่อ สี และรูปของร้าน</div><div className={styles.ticketRow}><Check size={16} /> ค่าทำเว็บจ่ายครั้งเดียว</div>
+            <div className={styles.barcode} /><small>A WEBSITE WITH YOUR NAME ON IT.</small>
           </div></div>
           <div className={`${styles.floatingCard} ${styles.tablePosition}`} aria-hidden="true"><div className={styles.tableCard}>
-            <span className={styles.cardLabel}>A TABLE FOR GOOD TIMES</span><div className={styles.tableIllustration}><i /><i /><i /><i /><span><UtensilsCrossed size={35} strokeWidth={1.2} /></span></div>
-            <div className={styles.tableCaption}>ทุกโต๊ะ<span>เชื่อมถึงกัน <ArrowUpRight size={15} /></span></div>
+            <span className={styles.cardLabel}>YOUR BRAND GOES HERE</span><div className={styles.tableIllustration}><i /><i /><i /><i /><span><UtensilsCrossed size={35} strokeWidth={1.2} /></span></div>
+            <div className={styles.tableCaption}>ชื่อร้านของคุณ<span>สไตล์ที่เป็นคุณ</span></div>
           </div></div>
-          <div className={`${styles.floatingCard} ${styles.kitchenPosition}`} aria-hidden="true"><div className={styles.kitchenPill}><span><ChefHat size={23} strokeWidth={1.5} /></span><div><small>LESS CHAOS. MORE COOKING.</small><strong>จากโต๊ะ ส่งตรงถึงครัว</strong></div><span className={styles.pulseDot} /></div></div>
-          <div className={styles.heroBottom}><span>YOUR NAME RESTAURANT</span><span className={styles.scrollHint}>SCROLL TO GET A TASTE <ArrowDown size={13} /></span><span>GOOD TIMES START HERE</span></div>
+          <div className={`${styles.floatingCard} ${styles.kitchenPosition}`} aria-hidden="true"><div className={styles.kitchenPill}><span><Globe2 size={23} strokeWidth={1.5} /></span><div><small>YOUR RESTAURANT, ONLINE.</small><strong>ให้ลูกค้ารู้จักร้านคุณ</strong></div><span className={styles.pulseDot} /></div></div>
+          <div className={styles.heroBottom}><span>WEBSITES FOR RESTAURANT OWNERS</span><span className={styles.scrollHint}>SCROLL TO MEET YOUR NEXT WEBSITE</span><span>ONE RESTAURANT. YOUR IDENTITY.</span></div>
         </section>
 
-        <div className={styles.marquee} aria-hidden="true"><div className={styles.marqueeTrack}>{[0, 1, 2, 3].map(index => <span key={index}>GOOD FOOD <Plus /> GOOD PEOPLE <Plus /> GREAT FLOW <Plus /></span>)}</div></div>
+        {!isPreview && <>
+        <div className={styles.marquee} aria-hidden="true"><div className={styles.marqueeTrack}>{[0, 1, 2, 3].map(index => <span key={index}>YOUR BRAND <Plus /> YOUR MENU <Plus /> YOUR WEBSITE <Plus /></span>)}</div></div>
+
+        <section id="features" className={styles.features} aria-labelledby="features-title">
+          <div className={styles.sectionHeading} data-reveal><h2 id="features-title">เว็บของคุณ<br /><span>มาพร้อมอะไรบ้าง.</span></h2></div>
+          <div className={styles.benefitGrid}>{showcase.map(item => <article className={styles.benefit} key={item.title}>
+            <div data-reveal><LivePreview title={item.title} src={item.preview} href={item.href} /></div>
+            <div className={styles.benefitCopy} data-reveal><div><h3>{item.title}</h3><p>{item.text}</p></div></div>
+          </article>)}</div>
+        </section>
 
         <section id="experience" className={styles.experience} data-story aria-labelledby="experience-title">
           <div className={styles.experienceFrame}>
             <div className={styles.storyCopy}>
-              <p className={styles.eyebrow} data-reveal>01 / THE EXPERIENCE</p>
-              <h2 id="experience-title" data-reveal>มื้อที่ดี<br />เริ่มจาก<span>อะไรที่ง่ายขึ้น.</span></h2>
-              <div className={styles.steps}>{steps.map((step, index) => <div className={styles.step} key={step.label} data-step={index}>
-                <span className={styles.stepNumber}>0{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div><ArrowUpRight size={19} aria-hidden="true" />
+
+              <h2 id="experience-title" data-reveal>ร้านแบบไหน<span>ก็เป็นตัวเองได้.</span></h2>
+              <div className={styles.steps}>{audiences.map((item, index) => <div className={styles.step} key={item.label} data-step={index}>
+                <span className={styles.stepNumber}>0{index + 1}</span><div><h3>{item.title}</h3><p>{item.text}</p></div>
               </div>)}</div>
+
             </div>
             <div className={styles.storyVisual} aria-hidden="true">
-              <span className={styles.orbitLabel}>FROM THE FIRST SCAN TO THE LAST BITE</span>
+
               <div className={styles.orbitRing} /><div className={styles.orbitRingSmall} />
-              <div className={styles.storySheets}>{steps.map((step, index) => <div className={styles.storySheet} data-sheet={index} key={step.label}>
-                <div className={styles.screenHeader}><span>Your name<small>Restaurant</small></span><step.icon size={25} strokeWidth={1.5} /></div>
+              <div className={styles.storySheets}>{audiences.map((item, index) => <div className={`${styles.storySheet} ${styles.audienceSheet}`} data-sheet={index} key={item.label}>
+                <div className={styles.screenHeader}><span>Your name<small>Restaurant</small></span><item.icon size={25} strokeWidth={1.5} /></div>
                 <div className={styles.screenDivider} /><span className={styles.screenCounter}>0{index + 1} / 04</span>
-                <div className={styles.screenIcon}><step.icon size={63} strokeWidth={1} /></div>
-                <h3>{step.screen}</h3><p>{step.detail}</p>
-                <div className={styles.screenRows}>{[0, 1, 2].map(row => <div key={row}><span /><i /><Check size={14} /></div>)}</div>
-                <span className={styles.screenButton}>{step.label}<ArrowRight size={17} /></span>
-                <small className={styles.screenNote}>ภาพประกอบขั้นตอนการใช้งาน</small>
+                <div className={styles.audienceIllustration}><span /><span /><item.icon size={78} strokeWidth={1.1} /></div>
+                <p className={styles.audienceLabel}>{item.label}</p>
+                <h3>{item.title}</h3>
+                <p className={styles.audienceCaption}>{item.caption}</p>
+                <span className={styles.screenButton}>YOUR NEXT CHAPTER</span>
               </div>)}</div>
-              <div className={styles.storyCaption}><span className={styles.statusDot} /> ONE RESTAURANT. ALL CONNECTED.</div>
+
             </div>
           </div>
         </section>
 
-        <section id="features" className={styles.features} aria-labelledby="features-title">
-          <div className={styles.sectionHeading} data-reveal><p className={styles.eyebrow}>02 / SMALL DETAILS. BIG DIFFERENCE.</p><h2 id="features-title">หน้าร้านลื่นไหล<br /><span>หลังร้านลงตัว.</span></h2><p>ทุกส่วนที่ร้านต้องใช้ เชื่อมไว้ในที่เดียว<br />เลือกเปิดหน้าที่ต้องการ แล้วไปต่อได้เลย</p></div>
-          <div className={styles.featureList}>{features.map((feature, index) => <article className={styles.feature} key={feature.en} data-reveal>
-            <div className={styles.featureTop}><span>0{index + 1}</span><feature.icon size={28} strokeWidth={1.3} aria-hidden="true" /></div><small>{feature.en}</small><h3>{feature.title}</h3><p>{feature.description}</p><Link href={feature.href} prefetch={false}>{feature.cta}<ArrowUpRight size={20} aria-hidden="true" /></Link>
-          </article>)}</div>
-          <div className={styles.nextUp} data-reveal><span>ON THE HORIZON</span><p>ก้าวต่อไปของร้าน</p><div><span>ชำระเงิน</span><span>สต็อกวัตถุดิบ</span><span>รายงานยอดขาย</span><span>สิทธิ์พนักงาน</span></div><small>ฟีเจอร์ในแผนพัฒนา ยังไม่เปิดใช้งาน</small></div>
-        </section>
-
-        <section className={styles.invitation} aria-labelledby="invitation-title"><div className={styles.invitationCircle} aria-hidden="true" /><p className={styles.eyebrow} data-reveal>LESS WAITING. MORE LIVING.</p><h2 id="invitation-title" data-reveal>มื้อดี ๆ<br />ไม่ควร<span>ยุ่งยาก.</span></h2><Link href="/order" prefetch={false} className={styles.lightButton}>หาเมนูโปรดของคุณ <ArrowUpRight size={21} aria-hidden="true" /></Link><span className={styles.invitationSmall}>SIT BACK. WE’LL TAKE IT FROM HERE.</span></section>
-
-
         <LocationSection />
+
+        <section id="contact" className={styles.invitation} aria-labelledby="invitation-title"><div className={styles.invitationCircle} aria-hidden="true" /><p className={styles.eyebrow} data-reveal>YOUR NEXT CHAPTER STARTS HERE.</p><h2 id="invitation-title" data-reveal>ร้านของคุณ.<br />เว็บ<span>ของคุณ.</span></h2><p className={styles.invitationDescription}>เริ่มจากเล่าให้ฟัง ว่าอยากให้เว็บของร้านเป็นแบบไหน</p><button type="button" className={styles.lightButton}>ติดต่อทำเว็บ</button><span className={styles.invitationSmall}>MADE FOR YOUR RESTAURANT. MADE TO BE YOURS.</span></section>
+        </>}
       </main>
-      <footer className={styles.footer}><div className={styles.footerTop}><Link href="/" className={styles.brand}><span>Your name<span className={styles.brandDot}>.</span></span><small>Restaurant</small></Link><p>Good food. Good people. Great flow.</p><a href="#main-content">กลับด้านบน <ArrowUpRight size={17} aria-hidden="true" /></a></div><div className={styles.footerBottom}><span>Your name Restaurant</span><nav aria-label="ทางเข้าสำหรับทีมงาน"><Link href="/kitchen" prefetch={false}>ครัว</Link><Link href="/cashier" prefetch={false}>แคชเชียร์</Link><Link href="/admin" prefetch={false}>ผู้ดูแลร้าน</Link></nav><span>MADE FOR THE WAY YOU DINE.</span></div></footer>
+      {!isPreview && <footer className={styles.footer}><div className={styles.footerTop}><Link href="/" className={styles.brand}><span>Your name<span className={styles.brandDot}>.</span></span><small>Restaurant</small></Link><p>Your restaurant. Your identity. Your website.</p><a href="#main-content">กลับด้านบน</a></div><div className={styles.footerBottom}><span>Your name Restaurant</span><nav aria-label="เว็บตัวอย่าง"><Link href="/order" prefetch={false}>ลองสั่งอาหาร</Link><Link href="/kitchen" prefetch={false}>ตัวอย่างครัว</Link><Link href="/admin" prefetch={false}>ตัวอย่างหลังร้าน</Link></nav><span>BUILT AROUND YOUR BUSINESS.</span></div></footer>}
     </LandingMotion>
   );
 }

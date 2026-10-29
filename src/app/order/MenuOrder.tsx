@@ -85,7 +85,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
 
   return (
     <main className={styles.page} lang="th">
-      <div className={styles.content}>
+      <div className={`${styles.content} ${styles.menuContent}`}>
         <header className={styles.header}>
           <RestaurantBrand />
           <div className={styles.headingRow}>

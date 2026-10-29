@@ -95,12 +95,35 @@ at the owner's request; only source review and Neon provisioning were performed.
 
 ## Landing page and location
 
-The homepage includes an animated hero, ordering workflow, existing feature links,
-future-feature labels and a simulated location/contact section. No restaurant
-address or opening hours are invented. Edit src/components/landing/location.ts to
-add verified contact details and the Google Maps embed iframe src; keep the URL
-empty to show the labeled placeholder. Directions links appear only after a valid
-Google Maps URL is configured. Phone links require a valid tel: value.
+The homepage offers a restaurant website to business owners, built for each
+restaurant with a one-time website fee. It leads with an animated hero and live
+website previews, followed by the audience story, a location example and a
+contact invitation.
+Contact buttons deliberately have no destination yet, as requested by the owner.
+No package price or domain/hosting arrangement has been fixed in the copy.
+
+The benefits section embeds the actual pages in lazy-loaded iframe previews:
+the homepage hero, the customer menu, the kitchen and admin menu management.
+All four previews share a landscape iPad frame at public/landing/ipad-landscape.png.
+The transparent screen overlays the actual iframe, so no screenshots are required.
+This frame was prepared with built-in imagegen from the owner's iPad Pro 2018
+mockup reference by Lstore Graphics. The original PSD files are not bundled.
+The homepage uses /?preview=1 to show only the header and hero so the page
+cannot embed itself recursively. /preview/menu redirects to the first active
+table's actual ordering page, or /order when no active table is configured.
+Previews block scripts, form submission and interaction; links open each full
+page in a new tab. No orders or menu changes are submitted by the previews.
+
+The four-card scroll story introduces the owners the service is for: new
+restaurants, established local favourites, social-first restaurants and owners
+building their brand. It uses Lucide illustrations and keeps the existing
+scroll-linked card animation. Feature details appear in the iframe section.
+
+The lower map demonstrates a restaurant client's website. No restaurant address
+or opening hours are invented. Edit src/components/landing/location.ts to add
+verified restaurant details and the Google Maps embed iframe src; keep the URL
+empty to show the labeled placeholder. Directions links appear only after a
+valid Google Maps URL is configured. Phone links require a valid tel: value.
 
 Desktop motion follows scroll; narrow or short viewports use normal page flow.
 Use the motion control to pause animations. Reduced-motion preferences are

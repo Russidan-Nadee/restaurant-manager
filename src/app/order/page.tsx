@@ -1,6 +1,6 @@
 import RestaurantBrand from "@/components/RestaurantBrand";
 import Link from "next/link";
-import { Armchair, ArrowRight } from "lucide-react";
+import { Armchair } from "lucide-react";
 import { getDiningTables } from "@/lib/menu";
 import styles from "./page.module.css";
 
@@ -21,8 +21,8 @@ export default async function OrderPage() {
             <Link key={table.id} href={"/order/" + table.name} className={styles.tableLink}>
               <Armchair size={22} strokeWidth={1.75} aria-hidden="true" />
               <span>โต๊ะ {table.name}</span>
-              <ArrowRight size={20} strokeWidth={1.75} aria-hidden="true" />
-            </Link>
+
+</Link>
           ))}
         </nav>
       </div>

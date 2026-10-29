@@ -9,7 +9,6 @@
 .tables { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 4px 0 40px; }
 .tableLink { display: flex; align-items: center; gap: 12px; min-height: 104px; padding: 22px; border: 1px solid var(--restaurant-rule); border-radius: 22px; background: white; color: var(--restaurant-ink); text-decoration: none; font-size: 19px; font-weight: 600; }
 .tableLink svg:first-child { flex-shrink: 0; color: var(--restaurant-red); }
-.tableLink svg:last-child { flex-shrink: 0; margin-left: auto; width: 18px; color: var(--restaurant-muted); }
 .menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; list-style: none; padding: 0 0 24px; margin: 0; }
 .menuItem { display: flex; flex-direction: column; align-items: stretch; min-width: 0; overflow: hidden; border: 1px solid var(--restaurant-rule); border-radius: 24px; background: #ffffffcf; }
 .foodMedia { position: relative; width: 100%; aspect-ratio: 4 / 3; flex-shrink: 0; overflow: hidden; background: var(--restaurant-paper-deep); }
@@ -80,6 +79,7 @@
 .page button:focus-visible, .tableLink:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 4px; }
 @media (hover: hover) { .addToCart:not(:disabled):hover, .submit:not(:disabled):hover { background: var(--restaurant-red-dark); } .tableLink:hover { border-color: #c7342b80; background: #fffaf8; } }
 @media (hover: hover) { .confirmItem:not(:disabled):hover { background: var(--restaurant-red-dark); } .quantityButton:not(:disabled):hover, .dialogClose:not(:disabled):hover { border-color: var(--restaurant-red); background: #fffaf8; } }
+@media (min-width: 601px) and (orientation: landscape) { .menuContent { max-width: 1440px; } .menu { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
   .page { padding: 24px 16px 0; }
   .header { padding-bottom: 24px; }
@@ -88,7 +88,6 @@
   .tableName { padding: 9px 12px; font-size: 13px; }
   .tables { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .tableLink { flex-wrap: wrap; gap: 10px; padding: 18px; font-size: 17px; }
-  .tableLink svg:last-child { display: none; }
   .menu { gap: 12px; }
   .menuItem { border-radius: 20px; }
   .dish { padding: 12px 12px 0; }

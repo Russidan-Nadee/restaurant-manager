@@ -25,6 +25,8 @@ Accessibility: https://lucide.dev/guide/react/advanced/accessibility
 - Default visual style: outline SVG, currentColor, 20px or 24px, strokeWidth 1.75.
 - Keep the same stroke style and size within the same group of controls.
 - Use text labels for primary actions. Decorative icons are aria-hidden.
+- Omit decorative arrow icons on labeled buttons, links and illustrations. Keep
+  directional icons when they are the actual control, such as reordering statuses.
 - An icon-only button needs an accessible name on the button and a touch target of at least 44px.
 - Do not combine Lucide with another UI icon pack, icon fonts or emoji.
 - Candidate icons: UtensilsCrossed for food, ClipboardList for orders,
@@ -210,6 +212,38 @@ width. Use muted text when neither is enabled and red text for the surcharge.
 Configuration remains in the existing edit dialog; never enable choices on
 live menus without the owner's instruction.
 
+## Restaurant website service landing — 2026-10-29
+
+The homepage sells a restaurant website to business owners. The service is built
+for each restaurant and charges a one-time website fee. This supersedes the
+previous landing page's diner-facing copy and operational-feature introduction.
+Keep the approved ivory/red/navy identity, fonts, floating hero cards, marquee,
+four-screen scroll story, mobile flow and reduced-motion behavior.
+
+Lead with a website in the owner's own restaurant identity. Place the included
+features and live iframe previews immediately after the hero/marquee, followed by
+who the service is for, a location example and a contact
+invitation. Benefits use large image areas, short headings and brief descriptions.
+The benefits section uses the actual pages in lazy-loaded iframe previews,
+inside a landscape iPad mockup and a link to open each full page. Use only the
+landscape device, with a transparent screen aperture around the actual iframe;
+keep public/landing/ipad-landscape.png separate from page content. The first preview
+shows only the homepage header/hero to prevent recursive embeds. The menu preview
+resolves an active table dynamically. Previews show server-rendered content with
+scripts and form submission blocked, so they cannot place orders or edit menus.
+The four-card scroll story describes the owners the service is for: opening a
+new restaurant, serving an established local following, connecting from social
+channels and building a distinct brand. Use Lucide illustrations, keeping the
+existing card-stack markup and motion. Feature descriptions belong to the iframe
+section. Do not invent prices, client projects, testimonials, delivery guarantees
+or recurring-cost terms.
+Domain/hosting details and scope are agreed before starting each project.
+
+The map demonstrates a restaurant client's website, not the service provider's
+office. Contact buttons intentionally have no destination until the owner adds
+their contact channel. No FAQ or delivery-process section. Operational routes
+retain their existing behavior.
+
 ## Configurable table and food statuses — 2026-10-29
 
 This replaces the earlier read-only kitchen and inferred cashier occupancy rules.
@@ -260,3 +294,15 @@ explanation below the floor map.
 On short landscape viewports, allow the whole dialog to scroll so confirmations
 and errors cannot clip bottom controls. Closing after payment returns focus to
 the table list when the original table button is now disabled.
+
+### Landing copy density
+
+Omit the numbered section eyebrows, duplicate feature introduction, audience-stage
+English captions, the return-to-preview link and the extra map disclaimer. Retain
+the map placeholder badge and accessible description. Keep section headings and
+the existing four-card animation.
+
+Customer food cards use three columns on landscape viewports at least 601px
+wide. The customer menu can expand to 1440px on landscape screens so those
+three columns have larger cards. Portrait layouts keep the existing 960px
+content limit and two columns, or one below 361px. Table selection is unchanged.
