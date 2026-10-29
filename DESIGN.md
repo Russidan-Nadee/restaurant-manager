@@ -47,7 +47,7 @@ Begin with a single restaurant and two operational views, as confirmed by the ow
 1. Customer: scan a table QR, view available dishes, choose quantities and send an order.
 2. Kitchen: read table numbers, dishes and quantities. Keep this first view free of action buttons; status controls can follow later.
 
-The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Employee. Menu and Table read real database records; Employee starts as a page shell with no mock data. The admin area links to both operational views. Menu management supports adding/editing names, descriptions and prices, opening/closing sales, and uploading/removing menu photos. Table management supports adding, naming and retiring tables; authentication remains future work.
+The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Status, Employee. Menu and Table read real database records; Employee is a clearly labeled interactive mockup. The admin area links to both operational views. Menu management supports adding/editing names, descriptions and prices, opening/closing sales, and uploading/removing menu photos. Table management supports adding, naming and retiring tables; authentication remains future work.
 
 Keep checkout, payment, inventory, Excel, Google Sheets
 and LINE integrations for later milestones. Do not turn the first release into a POS suite.
@@ -306,3 +306,21 @@ Customer food cards use three columns on landscape viewports at least 601px
 wide. The customer menu can expand to 1440px on landscape screens so those
 three columns have larger cards. Portrait layouts keep the existing 960px
 content limit and two columns, or one below 361px. Table selection is unchanged.
+
+### Employee profile management
+
+Use the existing admin mobile-card/desktop-table pattern for names, phone,
+position, working-status checkbox and edit action. The add/edit native dialog
+prioritizes the required name, with optional phone and position secondary.
+Keep save/cancel in a bottom footer and allow form-body scrolling; on short
+screens allow the full dialog to scroll. Retain inactive demo profiles in the list.
+No avatars, login or implied permissions.
+
+### Employee mockup — owner-approved exception
+
+The owner explicitly allows sample data on Employee only. Show a small ข้อมูลตัวอย่าง
+badge and explain that edits reset on reload. Keep add/edit/status controls usable
+with local state, no DB/auth wiring or persistent browser storage. Use generic
+sample names and placeholder phone numbers; preserve the existing profile UI and
+mobile card layout. The no-mock-data rule continues to apply to other operational
+views. Existing employee database schema is retained without modification.

@@ -62,7 +62,7 @@ Follow [DESIGN.md](DESIGN.md), adapted from Scarpetta. No emoji are allowed in p
 - /admin: Overview dashboard with real order/menu/table counts and the latest orders.
 - /admin/menu: add/edit real menus, change prices, open/close sales and upload/remove menu images.
 - /admin/tables: add tables, set admin-only names, retire tables and preview/download each table QR.
-- /admin/employees: employee page shell without mock employee records.
+- /admin/employees: interactive employee mockup with clearly labeled sample data.
 - Admin links also open customer, kitchen and cashier views. Authentication and staff authorization are not implemented yet.
 
 No menu or order mock data is included. Migration 002 creates only the five table numbers requested by the owner. No tests or builds were run for this UI iteration at the owner's request.
@@ -257,3 +257,17 @@ bill dialog with actual line totals, a scrolling receipt and bottom total/action
 Options and food statuses are secondary. Free tables are disabled. Confirmation
 stays in the same dialog; short screens can scroll to all controls. No browser
 flow or build was run; final lint and TypeScript checks exited 0.
+
+## Employees
+
+/admin/employees is an interactive mockup, as requested by the owner. Five
+clearly labeled sample profiles use generic names and non-dialable placeholder
+phone numbers. Users can add/edit profiles or toggle working status in local
+React state. Reloading the page restores the initial samples.
+
+There are no employee database reads/writes, browser storage, Server Actions or
+authentication. The previously applied employees schema remains untouched for a
+future backend; no fake staff records are seeded into Neon. Other operational
+pages retain their actual database connections. Lint and TypeScript passed;
+no unit tests, build or browser flow were run. Review future unit-test cases with
+the owner before adding tests.

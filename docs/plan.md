@@ -49,7 +49,7 @@ Use DESIGN.md (Scarpetta reference), lucide-react icons and no emoji. Start the 
 - Overview: /admin (initial admin page, no redirect).
 - Menu: /admin/menu.
 - Table: /admin/tables.
-- Employee: /admin/employees, initially a page shell without employee records or mutation controls.
+- Employee: /admin/employees, an interactive mockup with sample profiles and local-only edits.
 
 ## Overview dashboard
 
@@ -124,3 +124,14 @@ The owner requested a stronger red/white restaurant style. The homepage, custome
 - Expected visit/token/amount reject stale or repeated payment requests. Generic
   table transitions cannot close unpaid visits. Zero-total visits are supported.
 - Gateway integration and actual electronic charges remain outside this change.
+
+## Employee mockup — 2026-10-29
+
+- Owner-approved sample profiles are isolated to /admin/employees.
+- Required name, optional phone/job title, and local working-status checkbox.
+- Add/edit native dialog; inactive sample records remain visible and editable.
+- Five generic profiles use non-dialable phones; all edits reset on reload.
+- No DB/network/storage/Server Actions/authentication for this mockup.
+- Existing employees schema is retained; no real staff records are created.
+- Lint/types and independent source review passed. No unit tests, build or browser
+  flow run; future unit cases require owner review before writing test code.
