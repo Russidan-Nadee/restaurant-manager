@@ -1,3 +1,5 @@
+import type { ProteinId } from "@/lib/menu-options";
+
 export type RestaurantTable = {
   id: string;
   name: string;
@@ -19,6 +21,8 @@ export type MenuItem = {
   price: number;
   image_url: string | null;
   is_active: boolean;
+  protein_options: ProteinId[];
+  special_available: boolean;
   sort_order: number;
   created_at: string;
   updated_at: string;
@@ -39,6 +43,9 @@ export type OrderItem = {
   menu_item_id: string | null;
   name_snapshot: string;
   price_snapshot: number;
+  protein_snapshot: string | null;
+  is_special: boolean;
+  special_price_snapshot: number;
   quantity: number;
   subtotal: number;
   created_at: string;
@@ -51,4 +58,6 @@ export type CartItem = {
   name: string;
   price: number;
   quantity: number;
+  protein?: ProteinId | null;
+  isSpecial?: boolean;
 };

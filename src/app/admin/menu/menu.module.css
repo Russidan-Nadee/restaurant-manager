@@ -15,6 +15,13 @@
 .fields textarea { resize: vertical; }
 .fields .checkbox { flex-direction: row; align-items: center; gap: 10px; align-self: end; min-height: 48px; }
 .checkbox input { width: 20px; height: 20px; accent-color: var(--restaurant-red); }
+.optionsGroup legend { margin-bottom: 8px; padding: 0; font-size: 14px; }
+.optionChips { display: flex; flex-wrap: wrap; gap: 8px; }
+.fields .optionChip { box-sizing: border-box; display: inline-flex; flex-direction: row; align-items: center; gap: 10px; min-height: 44px; max-width: 100%; padding: 10px 14px; border: 1px solid var(--restaurant-rule); border-radius: 14px; background: var(--restaurant-surface); cursor: pointer; }
+.optionChip input { flex-shrink: 0; width: 20px; height: 20px; margin: 0; accent-color: var(--restaurant-red); }
+.optionChip:has(input:checked) { border-color: var(--restaurant-red); }
+.optionChip:has(input:focus-visible) { outline: 2px solid var(--restaurant-red); outline-offset: 3px; }
+.optionChip:has(input:disabled) { opacity: .6; cursor: not-allowed; }
 .fields input:focus-visible, .fields textarea:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 2px; }
 .fields input[type=file] { font-size: 13px; }
 .fields input[type=file]::file-selector-button { margin-right: 12px; padding: 6px 12px; border: 1px solid var(--restaurant-rule); border-radius: 20px; background: var(--restaurant-paper); color: var(--restaurant-ink); font: inherit; cursor: pointer; }

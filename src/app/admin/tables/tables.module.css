@@ -30,3 +30,18 @@
   .dialogHeader { padding: 14px 16px; }
   .dialogBody { padding: 20px 16px; }
 }
+
+.heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px; }
+.unnamed { color: var(--restaurant-muted); }
+.displayName { display: block; max-width: 240px; color: var(--restaurant-ink); font-family: var(--font-ui), sans-serif; font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.deleteButton { color: var(--restaurant-red-dark); }
+.formFields { display: grid; gap: 20px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.formFields:disabled { opacity: .6; }
+.formFields:disabled button, .close:disabled { cursor: not-allowed; }
+.formMessage { margin: 0; font-size: 14px; line-height: 1.9; }
+.formHint { margin: 0; color: var(--restaurant-muted); font-size: 12px; line-height: 1.8; }
+.formError { margin: 0; color: var(--restaurant-red-dark); font-size: 13px; }
+.urlField input::placeholder { color: #8a8c86; opacity: 1; }
+@media (max-width: 760px) {
+  .displayName { max-width: none; }
+}

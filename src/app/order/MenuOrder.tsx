@@ -3,35 +3,70 @@
 import RestaurantBrand from "@/components/RestaurantBrand";
 import { useRef, useState } from "react";
 import MenuItemImage from "./MenuItemImage";
-import { Armchair, Check, Plus, Send } from "lucide-react";
+import MenuItemDialog, { MAX_ITEM_QUANTITY } from "./MenuItemDialog";
+import { Armchair, Check, Minus, Plus, Send } from "lucide-react";
 import { placeOrder } from "@/lib/orders";
+import { getProteinLabel, SPECIAL_PRICE, type ProteinId } from "@/lib/menu-options";
 import type { CartItem } from "@/lib/types";
 import type { CustomerMenuItem, DiningTable } from "./types";
 import styles from "./page.module.css";
 
 const formatMoney = (cents: number) => new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(cents / 100);
+const lineKey = (item: Pick<CartItem, "menuItemId" | "protein" | "isSpecial">) => JSON.stringify([item.menuItemId, item.protein ?? null, item.isSpecial === true]);
+const variantLabel = (item: CartItem) => [getProteinLabel(item.protein), item.isSpecial ? "พิเศษ" : "ธรรมดา"].filter(Boolean).join(" · ");
 
 export default function MenuOrder({ table, menu }: { table: DiningTable; menu: CustomerMenuItem[] }) {
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<CustomerMenuItem | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [confirmedOrder, setConfirmedOrder] = useState("");
   const sending = useRef(false);
-  const cart: CartItem[] = menu.filter(item => (quantities[item.id] ?? 0) > 0).map(item => ({
-    menuItemId: item.id, name: item.name, price: item.price, quantity: quantities[item.id],
-  }));
+  const [dialogTrigger, setDialogTrigger] = useState<HTMLButtonElement | null>(null);
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
   const totalCents = cart.reduce((total, item) => total + Math.round(item.price * 100) * item.quantity, 0);
 
-  function addItem(id: string) {
+  function openItem(item: CustomerMenuItem, trigger: HTMLButtonElement) {
     if (sending.current) return;
+    setDialogTrigger(trigger);
+    setSelectedItem(item);
+  }
+
+  function addItem(protein: ProteinId | null, isSpecial: boolean, quantity: number): string | null {
+    if (sending.current || !selectedItem) return "กรุณารอส่งออร์เดอร์ให้เสร็จ";
+    if (!Number.isSafeInteger(quantity) || quantity < 1 || quantity > MAX_ITEM_QUANTITY) return "จำนวนอาหารไม่ถูกต้อง";
+    const newItem: CartItem = {
+      menuItemId: selectedItem.id, name: selectedItem.name,
+      price: selectedItem.price + (isSpecial ? SPECIAL_PRICE : 0), quantity, protein, isSpecial,
+    };
+    const key = lineKey(newItem);
+    const existing = cart.find(item => lineKey(item) === key);
+    if (existing && existing.quantity > MAX_ITEM_QUANTITY - quantity) return "จำนวนรายการนี้เกินจำนวนสูงสุดที่รับได้";
+    setCart(current => {
+      const match = current.find(item => lineKey(item) === key);
+      if (match) return current.map(item => lineKey(item) === key ? { ...item, quantity: item.quantity + quantity } : item);
+      return [...current, newItem];
+    });
     setError("");
     setConfirmedOrder("");
-    setQuantities(current => ({ ...current, [id]: (current[id] ?? 0) + 1 }));
+    setSelectedItem(null);
+    return null;
+  }
+
+  function changeQuantity(key: string, change: -1 | 1) {
+    if (sending.current) return;
+    setCart(current => current.flatMap(item => {
+      if (lineKey(item) !== key) return [item];
+      const quantity = item.quantity + change;
+      if (quantity > MAX_ITEM_QUANTITY) return [item];
+      return quantity > 0 ? [{ ...item, quantity }] : [];
+    }));
+    setError("");
+    setConfirmedOrder("");
   }
 
   async function submitOrder() {
-    if (sending.current || cart.length === 0) return;
+    if (sending.current || selectedItem || cart.length === 0) return;
     sending.current = true;
     setSubmitting(true);
     setError("");
@@ -39,7 +74,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
     try {
       const id = await placeOrder(table.id, cart);
       setConfirmedOrder(id);
-      setQuantities({});
+      setCart([]);
     } catch {
       setError("ส่งออร์เดอร์ไม่สำเร็จ กรุณาตรวจสอบรายการแล้วลองใหม่");
     } finally {
@@ -77,7 +112,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
                 </div>
                 <div className={styles.cardFooter}>
                   <span className={styles.price}>{formatMoney(Math.round(item.price * 100))}</span>
-                  <button className={styles.addToCart} type="button" aria-label={"เพิ่ม " + item.name + " ลงตะกร้า"} disabled={submitting} onClick={() => addItem(item.id)}>
+                  <button className={styles.addToCart} type="button" aria-label={"เพิ่ม " + item.name + " ลงตะกร้า"} aria-haspopup="dialog" disabled={submitting} onClick={event => openItem(item, event.currentTarget)}>
                     <Plus size={20} strokeWidth={1.75} aria-hidden="true" />
                   </button>
                 </div>
@@ -85,6 +120,33 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
             );
           })}
         </ul>
+
+        {cart.length > 0 && <section className={styles.cart} aria-labelledby="cart-title" aria-busy={submitting}>
+          <h2 id="cart-title">รายการที่เลือก</h2>
+          <ul className={styles.cartList}>
+            {cart.map(item => {
+              const key = lineKey(item);
+              const variant = variantLabel(item);
+              const identity = `${item.name} (${variant})`;
+              return <li key={key} className={styles.cartLine}>
+                <div className={styles.cartDish}>
+                  <h3>{item.name}</h3>
+                  <p>{variant}</p>
+                  <span className={styles.cartPrice}>{formatMoney(Math.round(item.price * 100) * item.quantity)}</span>
+                </div>
+                <div className={styles.quantityControl}>
+                  <button type="button" className={styles.quantityButton} aria-label={`ลดจำนวน ${identity}`} disabled={submitting} onClick={() => changeQuantity(key, -1)}>
+                    <Minus size={18} strokeWidth={1.75} aria-hidden="true" />
+                  </button>
+                  <output className={styles.quantityValue} aria-label={`จำนวน ${identity}`} aria-live="polite">{item.quantity}</output>
+                  <button type="button" className={styles.quantityButton} aria-label={`เพิ่มจำนวน ${identity}`} disabled={submitting || item.quantity >= MAX_ITEM_QUANTITY} onClick={() => changeQuantity(key, 1)}>
+                    <Plus size={18} strokeWidth={1.75} aria-hidden="true" />
+                  </button>
+                </div>
+              </li>;
+            })}
+          </ul>
+        </section>}
 
         {menu.length > 0 && <footer className={styles.summary}>
           <div>
@@ -97,6 +159,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
           </button>
         </footer>}
       </div>
+      {selectedItem && <MenuItemDialog key={selectedItem.id} item={selectedItem} trigger={dialogTrigger} disabled={submitting} onClose={() => setSelectedItem(null)} onConfirm={addItem} />}
     </main>
   );
 }

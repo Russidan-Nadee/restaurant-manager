@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 type Summary = { today_orders: number; waiting_orders: number; active_menu: number; tables: number };
 type RecentOrder = {
   id: string; table_name: string; status: string; created_at: Date;
-  items: { name: string; quantity: number }[];
+  items: { name: string; quantity: number; protein: string | null; is_special: boolean }[];
 };
 const statusLabels: Record<string, string> = { placed: "รอรับออร์เดอร์", preparing: "กำลังทำ", ready: "พร้อมเสิร์ฟ" };
 
@@ -21,11 +21,12 @@ export default async function AdminOverviewPage() {
       "AND created_at < ((date_trunc(\'day\', now() AT TIME ZONE \'Asia/Bangkok\') + interval \'1 day\') AT TIME ZONE \'Asia/Bangkok\')) AS today_orders, " +
       "(SELECT count(*)::int FROM orders WHERE status = \'placed\') AS waiting_orders, " +
       "(SELECT count(*)::int FROM menu_items WHERE is_active = true) AS active_menu, " +
-      "(SELECT count(*)::int FROM restaurant_tables) AS tables",
+      "(SELECT count(*)::int FROM restaurant_tables WHERE is_active = true) AS tables",
     ),
     database.query<RecentOrder>(
       "SELECT o.id, t.name AS table_name, o.status, o.created_at, " +
-      "jsonb_agg(jsonb_build_object(\'name\', i.name_snapshot, \'quantity\', i.quantity) ORDER BY i.created_at, i.id) AS items " +
+      "jsonb_agg(jsonb_build_object(\'name\', i.name_snapshot, \'quantity\', i.quantity, " +
+      "\'protein\', i.protein_snapshot, \'is_special\', i.is_special) ORDER BY i.created_at, i.id) AS items " +
       "FROM (SELECT id, table_id, status, created_at FROM orders ORDER BY created_at DESC, id DESC LIMIT 10) o " +
       "JOIN restaurant_tables t ON t.id = o.table_id JOIN order_items i ON i.order_id = o.id " +
       "GROUP BY o.id, t.name, o.status, o.created_at ORDER BY o.created_at DESC, o.id DESC",
@@ -65,7 +66,9 @@ export default async function AdminOverviewPage() {
                 <td className={styles.orderTime} data-label="เวลา">{time.format(new Date(order.created_at))}</td>
                 <th scope="row" className={styles.tableNumber} data-label="โต๊ะ">{order.table_name}</th>
                 <td className={styles.mobileFull} data-label="รายการอาหาร"><ul className={styles.orderItems}>
-                  {order.items.map((item, index) => <li key={index}><strong>{item.quantity}</strong> × {item.name}</li>)}
+                  {order.items.map((item, index) => <li key={index}><strong>{item.quantity}</strong> × {item.name}
+                    {(item.protein || item.is_special) && <span> ({[item.protein, item.is_special ? "พิเศษ" : null].filter(Boolean).join(" · ")})</span>}
+                  </li>)}
                 </ul></td>
                 <td className={styles.orderStatus} data-label="สถานะ">{statusLabels[order.status] ?? order.status}</td>
               </tr>)}

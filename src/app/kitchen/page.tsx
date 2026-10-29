@@ -10,7 +10,7 @@ export const runtime = "nodejs";
 type KitchenOrder = {
   id: string;
   table_name: string;
-  items: { id: string; name: string; quantity: number }[];
+  items: { id: string; name: string; quantity: number; protein: string | null; is_special: boolean }[];
 };
 
 export default async function KitchenPage() {
@@ -19,7 +19,8 @@ export default async function KitchenPage() {
   try {
     const result = await getDatabase().query<KitchenOrder>(
       "SELECT o.id, t.name AS table_name, " +
-      "jsonb_agg(jsonb_build_object('id', i.id, 'name', i.name_snapshot, 'quantity', i.quantity) ORDER BY i.created_at, i.id) AS items " +
+      "jsonb_agg(jsonb_build_object('id', i.id, 'name', i.name_snapshot, 'quantity', i.quantity, " +
+      "'protein', i.protein_snapshot, 'is_special', i.is_special) ORDER BY i.created_at, i.id) AS items " +
       "FROM orders o JOIN restaurant_tables t ON t.id = o.table_id " +
       "JOIN order_items i ON i.order_id = o.id " +
       "WHERE o.status = ANY($1::text[]) " +
@@ -70,7 +71,11 @@ export default async function KitchenPage() {
                       {order.table_name}
                     </th>
                   )}
-                  <td className={styles.menuName}>{item.name}</td>
+                  <td className={styles.menuName}>{item.name}
+                    {(item.protein || item.is_special) && <small className={styles.itemOptions}>
+                      {[item.protein, item.is_special ? "พิเศษ" : null].filter(Boolean).join(" · ")}
+                    </small>}
+                  </td>
                   <td className={styles.quantity}>{item.quantity}</td>
                 </tr>
               ))}

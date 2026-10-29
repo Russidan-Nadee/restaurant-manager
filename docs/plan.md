@@ -87,3 +87,14 @@ The owner requested a stronger red/white restaurant style. The homepage, custome
 - QR links use the selected website origin and /order/<table-code>. Browser origin is the default; localhost is rejected with instructions to use a public or LAN-reachable URL.
 - QR generation needs no DB change. No new dependency was required.
 - No tests/build, browser UI checks or real-device scans were run under the existing user instruction.
+
+## Adding, naming and retiring tables
+
+- Owner confirmed retirement hides a table while retaining history, and pending orders block retirement.
+- Latest correction: customer-facing views show table numbers only. Display names are for admin only.
+- Migration 003 adds display_name/is_active, initializes a non-cycling 001–999 sequence, and guards place_order with a table-row lock and active check.
+- Admin Table now has native dialogs to add, name/clear a name and confirm retirement. Unnamed admin rows display muted numbers.
+- QR URLs retain immutable codes; new codes never reuse retired ones. Active table queries, dashboard counts and cashier exclude retired rows.
+- Retirement checks placed/preparing/ready under the same row lock used by order placement, preserving order history and preventing races.
+- npm run db:migrate applied 003 to the configured Neon database. No fixture tables were created.
+- No tests/build/type checks or live create/rename/retire flow were run under the existing user instruction. Future unit cases should be reviewed with the owner first.

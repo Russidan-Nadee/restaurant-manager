@@ -14,7 +14,7 @@
 .menuItem { display: flex; flex-direction: column; align-items: stretch; min-width: 0; overflow: hidden; border: 1px solid var(--restaurant-rule); border-radius: 24px; background: #ffffffcf; }
 .foodMedia { position: relative; width: 100%; aspect-ratio: 4 / 3; flex-shrink: 0; overflow: hidden; background: var(--restaurant-paper-deep); }
 .foodImage { object-fit: cover; }
-.foodPlaceholder { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; height: 100%; padding: 16px; color: var(--restaurant-muted); text-align: center; }
+.foodPlaceholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; padding: 16px; color: var(--restaurant-muted); text-align: center; }
 .foodPlaceholder svg { color: var(--restaurant-red); }
 .foodPlaceholder span { font-size: 12px; line-height: 1.8; }
 .dish { flex: 1; min-width: 0; padding: 16px 18px 0; }
@@ -33,8 +33,53 @@
 .success svg { color: var(--restaurant-red); }
 .error { margin: 0 0 22px; padding: 16px 18px; border-radius: 16px; background: var(--restaurant-red-soft); color: var(--restaurant-red-dark); font-size: 14px; line-height: 1.8; }
 .feedback { margin: 0; padding: 8px 4px 32px; color: var(--restaurant-muted); font-size: 15px; line-height: 1.8; }
+.cart { margin: 0 0 24px; padding: 22px 24px 8px; border: 1px solid var(--restaurant-rule); border-radius: 24px; background: #ffffffcf; }
+.cart > h2 { margin: 0 0 8px; color: var(--restaurant-ink); font-size: 20px; font-weight: 650; }
+.cartList { margin: 0; padding: 0; list-style: none; }
+.cartLine { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 0; }
+.cartLine + .cartLine { border-top: 1px solid var(--restaurant-rule); }
+.cartDish { min-width: 0; }
+.cartDish h3 { margin: 0; color: var(--restaurant-ink); font-size: 16px; font-weight: 600; line-height: 1.7; overflow-wrap: anywhere; }
+.cartDish p { margin: 3px 0 6px; color: var(--restaurant-muted); font-size: 13px; line-height: 1.7; }
+.cartPrice { color: var(--restaurant-red); font-family: var(--font-display), sans-serif; font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.quantityControl { display: flex; flex-shrink: 0; align-items: center; gap: 6px; }
+.quantityButton { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex-shrink: 0; padding: 0; border: 1px solid var(--restaurant-rule); border-radius: 50%; background: white; color: var(--restaurant-ink); cursor: pointer; }
+.quantityButton:disabled { background: #f0efeb; color: #a4a59f; cursor: default; }
+.quantityValue { min-width: 32px; max-width: 112px; color: var(--restaurant-ink); font-family: var(--font-display), sans-serif; font-size: 17px; font-weight: 600; text-align: center; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.itemDialog { width: min(520px, calc(100% - 40px)); max-width: 520px; max-height: 90svh; margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 28px; background: var(--restaurant-paper); color: var(--restaurant-ink); box-shadow: 0 24px 80px #14203340; }
+.itemDialog[open] { display: flex; flex-direction: column; }
+.itemDialog::backdrop { background: #14203399; }
+.dialogContent { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.dialogMedia { position: relative; }
+.dialogMedia .foodMedia { aspect-ratio: 16 / 9; }
+.dialogClose { position: absolute; top: 14px; right: 14px; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--restaurant-rule); border-radius: 50%; background: var(--restaurant-paper); color: var(--restaurant-ink); cursor: pointer; }
+.dialogBody { padding: 24px; }
+.dialogFooter { flex: 0 0 auto; padding: 16px 24px calc(24px + env(safe-area-inset-bottom)); border-top: 1px solid var(--restaurant-rule); background: var(--restaurant-paper); }
+.dialogFooter .optionHint, .dialogFooter .dialogError { margin-top: 0; margin-bottom: 12px; }
+.dialogFooter .confirmItem { margin-top: 0; }
+.dialogHeading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.dialogHeading h2 { min-width: 0; margin: 0; font-size: 24px; font-weight: 650; line-height: 1.6; overflow-wrap: anywhere; }
+.dialogHeading .price { flex-shrink: 0; padding-top: 6px; }
+.dialogDescription { margin: 8px 0 0; color: var(--restaurant-muted); font-size: 14px; line-height: 1.9; overflow-wrap: anywhere; }
+.optionGroup { min-width: 0; margin: 24px 0 0; padding: 0; border: 0; }
+.optionGroup legend { width: 100%; margin-bottom: 12px; padding: 0; font-size: 16px; font-weight: 600; }
+.optionGroup legend span { display: block; margin-top: 3px; color: var(--restaurant-muted); font-size: 12px; font-weight: 400; }
+.proteinOptions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.optionChoice, .specialChoice { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 14px; border: 1px solid var(--restaurant-rule); border-radius: 14px; background: white; font-size: 14px; cursor: pointer; }
+.optionChoice:has(input:checked), .specialChoice:has(input:checked) { border-color: var(--restaurant-red); background: var(--restaurant-red-soft); }
+.optionChoice input, .specialChoice input { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: var(--restaurant-red); }
+.specialChoice { flex-wrap: wrap; }
+.specialChoice strong { margin-left: auto; color: var(--restaurant-red); font-size: 13px; font-weight: 600; }
+.dialogQuantity { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--restaurant-rule); font-size: 16px; font-weight: 600; }
+.optionHint { margin: 16px 0 0; color: var(--restaurant-muted); font-size: 12px; line-height: 1.8; }
+.dialogError { margin: 16px 0 0; color: var(--restaurant-red-dark); font-size: 13px; line-height: 1.8; }
+.confirmItem { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 54px; margin-top: 20px; padding: 15px 20px; border: 0; border-radius: 18px; background: var(--restaurant-red); color: white; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+.confirmItem strong { font-family: var(--font-display), sans-serif; font-size: 18px; font-variant-numeric: tabular-nums; }
+.confirmItem:disabled { opacity: .45; cursor: default; }
+.itemDialog button:focus-visible, .itemDialog input:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 4px; }
 .page button:focus-visible, .tableLink:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 4px; }
 @media (hover: hover) { .addToCart:not(:disabled):hover, .submit:not(:disabled):hover { background: var(--restaurant-red-dark); } .tableLink:hover { border-color: #c7342b80; background: #fffaf8; } }
+@media (hover: hover) { .confirmItem:not(:disabled):hover { background: var(--restaurant-red-dark); } .quantityButton:not(:disabled):hover, .dialogClose:not(:disabled):hover { border-color: var(--restaurant-red); background: #fffaf8; } }
 @media (max-width: 600px) {
   .page { padding: 24px 16px 0; }
   .header { padding-bottom: 24px; }
@@ -56,5 +101,15 @@
   .summary { bottom: max(12px, env(safe-area-inset-bottom)); gap: 12px; padding: 16px; border-radius: 20px; }
   .summary strong { font-size: 21px; }
   .submit { gap: 8px; padding: 12px 18px; }
+  .cart { padding: 18px 16px 4px; border-radius: 20px; }
+  .cart > h2 { font-size: 18px; }
+  .cartLine { flex-wrap: wrap; gap: 12px; padding: 16px 0; }
+  .cartLine .quantityControl { margin-left: auto; }
+  .itemDialog { width: 100%; max-width: none; max-height: 92svh; margin: auto auto 0; border-radius: 26px 26px 0 0; }
+  .dialogBody { padding: 20px; }
+  .dialogFooter { padding: 14px 20px calc(20px + env(safe-area-inset-bottom)); }
+  .dialogHeading { gap: 12px; }
+  .dialogHeading h2 { font-size: 21px; }
+  .dialogHeading .price { font-size: 17px; }
 }
 @media (max-width: 360px) { .menu { grid-template-columns: minmax(0, 1fr); } }

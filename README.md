@@ -52,7 +52,7 @@ The dev and build scripts use Webpack so Next.js can use its WASM fallback when 
 
 ## Design
 
-Follow [DESIGN.md](DESIGN.md), adapted from Scarpetta. No emoji are allowed in project-authored content. Use lucide-react for UI icons. The next proposed milestone is a customer ordering view and a kitchen view; the current landing page intentionally shows only the restaurant name.
+Follow [DESIGN.md](DESIGN.md), adapted from Scarpetta. No emoji are allowed in project-authored content. Use lucide-react for UI icons. Customer ordering, kitchen, cashier and admin views are available; the landing page introduces the restaurant workflows with portfolio-inspired motion and a placeholder location section.
 
 ## Application routes
 
@@ -61,7 +61,7 @@ Follow [DESIGN.md](DESIGN.md), adapted from Scarpetta. No emoji are allowed in p
 - /kitchen: table, dish and quantity board with automatic refresh.
 - /admin: Overview dashboard with real order/menu/table counts and the latest orders.
 - /admin/menu: add/edit real menus, change prices, open/close sales and upload/remove menu images.
-- /admin/tables: real table data with per-table QR preview, PNG download and ordering links.
+- /admin/tables: add tables, set admin-only names, retire tables and preview/download each table QR.
 - /admin/employees: employee page shell without mock employee records.
 - Admin links also open customer, kitchen and cashier views. Authentication and staff authorization are not implemented yet.
 
@@ -119,3 +119,24 @@ reach this app through the computer's localhost. The selected origin persists ac
 table dialogs until the page unmounts. No QR database records or migrations are needed.
 PNG files contain the QR itself; filenames include the table code.
 These UI changes were source-reviewed only; tests/build and real-device QR scans were not run.
+
+## Table management
+
+Migration 003 adds nullable display_name and is_active to restaurant_tables, plus
+a monotonic sequence for codes 001–999. Existing name values remain immutable QR
+codes. New table codes are allocated automatically; retired codes are not reused.
+The sequence can leave gaps after failed transactions. It never cycles back to 001.
+
+Admin Table supports creating unnamed tables, setting/clearing an optional name
+and confirming retirement. Table numbers and admin names use separate columns. The name column shows
+the admin name, or a muted table number when no name has been set. Customer pages, QR sheets, kitchen
+and cashier continue to use table numbers only. Customer queries never fetch display_name.
+
+Retirement hides a table from admin, customer selection and cashier without deleting
+the table or past orders. Orders in placed/preparing/ready prevent retirement.
+The order function and retirement operation lock the same table row to serialize
+concurrent order placement and retirement. Retired table order URLs return not found,
+and the order function rejects stale submissions. There is no restore UI yet.
+
+Migration 003 was applied with npm run db:migrate. No new tables were inserted on
+the owner's behalf, and no tests/build or create/rename/retire UI flow was run.

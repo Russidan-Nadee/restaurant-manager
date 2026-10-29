@@ -45,7 +45,7 @@ Begin with a single restaurant and two operational views, as confirmed by the ow
 1. Customer: scan a table QR, view available dishes, choose quantities and send an order.
 2. Kitchen: read table numbers, dishes and quantities. Keep this first view free of action buttons; status controls can follow later.
 
-The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Employee. Menu and Table read real database records; Employee starts as a page shell with no mock data. The admin area links to both operational views. Menu management supports adding/editing names, descriptions and prices, opening/closing sales, and uploading/removing menu photos. Table management and authentication remain future work.
+The admin landing page is Overview at /admin, a dashboard showing real restaurant metrics and recent orders, not a directory of navigation links. Navigation order is Overview, Menu, Table, Employee. Menu and Table read real database records; Employee starts as a page shell with no mock data. The admin area links to both operational views. Menu management supports adding/editing names, descriptions and prices, opening/closing sales, and uploading/removing menu photos. Table management supports adding, naming and retiring tables; authentication remains future work.
 
 Keep checkout, payment, inventory, Excel, Google Sheets
 and LINE integrations for later milestones. Do not turn the first release into a POS suite.
@@ -68,6 +68,7 @@ Admin uses an ivory sidebar and mobile navigation header against a white main ca
 Sidebar navigation uses text labels without menu or brand icons; align the collapse control beside the restaurant name.
 On mobile, admin Menu, Table and Overview rows become readable cards with labels and 44px controls; retain table columns on desktop.
 Admin Table offers QR preview and PNG download for the actual configured table order URL.
+Optional table names are admin-only and have a separate column from table numbers. The name column falls back to a muted table number; customer-facing views and QR sheets show only the number. Renaming never changes QR URLs.
 Kitchen remains easy to scan.
 Cashier shows real table tiles with explicit vacant/occupied text and red occupied accents.
 Until table sessions and billing are implemented, cashier occupancy is inferred from existing
@@ -170,6 +171,7 @@ Additional motion is restrained: jar hover rises 10px/scales 1.03 over.7s; testi
 ## Reusable adaptation
 
 Keep the cream/sauce contrast, serif/sans roles, authentic food photography, generous spacing, and independent depth layers when adapting the theme. Exact restaurant copy, contact details, menu prices, product names, and logo belong to the Scarpetta reference and should be replaced for another brand. New interfaces should preserve legible contrast,≥44px touch targets, semantic reading order, and keyboard navigation.
+
 
 ## Animated landing page — 2026-10-28
 

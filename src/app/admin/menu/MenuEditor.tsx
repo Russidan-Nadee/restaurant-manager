@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useId, useRef, useState } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
+import { PROTEIN_OPTIONS, SPECIAL_PRICE, type ProteinId } from "@/lib/menu-options";
 import { saveMenuAction } from "./actions";
 import type { AdminMenuItem, MenuActionState } from "./types";
 import styles from "./menu.module.css";
@@ -12,11 +13,15 @@ const initialState: MenuActionState = { success: false, message: "" };
 export default function MenuEditor({ item, onClose }: { item: AdminMenuItem | null; onClose: () => void }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const proteinHintId = useId();
+  const specialHintId = useId();
   const [state, save, pending] = useActionState(saveMenuAction, initialState);
   const [name, setName] = useState(item?.name ?? "");
   const [description, setDescription] = useState(item?.description ?? "");
   const [price, setPrice] = useState(item ? item.price.toFixed(2) : "");
   const [active, setActive] = useState(item?.is_active ?? true);
+  const [proteinOptions, setProteinOptions] = useState<ProteinId[]>(item?.protein_options ?? []);
+  const [specialAvailable, setSpecialAvailable] = useState(item?.special_available ?? false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [removeImage, setRemoveImage] = useState(false);
@@ -107,6 +112,33 @@ export default function MenuEditor({ item, onClose }: { item: AdminMenuItem | nu
           <label className={styles.checkbox}>
             <input name="is_active" type="checkbox" checked={active} onChange={event => setActive(event.target.checked)} />เปิดขาย
           </label>
+          <fieldset className={`${styles.optionsGroup} ${styles.fullWidth}`} aria-describedby={proteinHintId}>
+            <legend>เนื้อสัตว์ที่ลูกค้าเลือกได้</legend>
+            <div className={styles.optionChips}>
+              {PROTEIN_OPTIONS.map(option => (
+                <label key={option.id} className={styles.optionChip}>
+                  <input name="protein_options" type="checkbox" value={option.id}
+                    checked={proteinOptions.includes(option.id)}
+                    onChange={event => {
+                      const checked = event.target.checked;
+                      setProteinOptions(current => checked
+                        ? [...current, option.id]
+                        : current.filter(protein => protein !== option.id));
+                    }} />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+            <p id={proteinHintId} className={styles.hint}>ตั้งค่าเฉพาะเมนูนี้ ไม่เลือกเลยจะไม่ถามเนื้อสัตว์ ลูกค้าเลือกได้ 1 อย่างจากตัวเลือกที่เปิดไว้ โดยใช้ราคาเมนูเดิม</p>
+          </fieldset>
+          <div className={styles.fullWidth}>
+            <label className={styles.optionChip}>
+              <input name="special_available" type="checkbox" checked={specialAvailable}
+                aria-describedby={specialHintId} onChange={event => setSpecialAvailable(event.target.checked)} />
+              พิเศษ +{SPECIAL_PRICE} บาทต่อจาน
+            </label>
+            <p id={specialHintId} className={styles.hint}>เปิดให้ลูกค้าเลือกพิเศษสำหรับเมนูนี้ เมนูใหม่จะยังไม่เปิดตัวเลือกเนื้อสัตว์และพิเศษจนกว่าจะตั้งค่า</p>
+          </div>
           <div className={styles.fullWidth}>
             <label className={styles.fileLabel}>ภาพเมนู (ไม่บังคับ)
               <input ref={fileRef} name="image" type="file" accept="image/jpeg,image/png,image/webp" onChange={event => selectImage(event.target.files?.[0])} />

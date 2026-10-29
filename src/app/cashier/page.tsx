@@ -13,7 +13,7 @@ export default async function CashierPage() {
   const result = await getDatabase().query<CashierTable>(
     "SELECT t.id, t.name, EXISTS (SELECT 1 FROM orders o " +
     "WHERE o.table_id = t.id AND o.status = ANY($1::text[])) AS occupied " +
-    "FROM restaurant_tables t WHERE t.name ~ $2 ORDER BY t.name ASC",
+    "FROM restaurant_tables t WHERE t.is_active = true AND t.name ~ $2 ORDER BY t.name ASC",
     [["placed", "preparing", "ready"], "^[0-9]{3}$"],
   );
   const updatedAt = new Date().toLocaleTimeString("th-TH", { timeZone: "Asia/Bangkok", hour: "2-digit", minute: "2-digit" });

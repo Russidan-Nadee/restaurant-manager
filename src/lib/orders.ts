@@ -6,7 +6,12 @@ export async function placeOrder(tableId: string, items: CartItem[]): Promise<st
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       tableId,
-      items: items.map(item => ({ menuItemId: item.menuItemId, quantity: item.quantity })),
+      items: items.map(item => ({
+        menuItemId: item.menuItemId,
+        quantity: item.quantity,
+        protein: item.protein ?? null,
+        isSpecial: item.isSpecial ?? false,
+      })),
     }),
   });
   const result = await response.json();
