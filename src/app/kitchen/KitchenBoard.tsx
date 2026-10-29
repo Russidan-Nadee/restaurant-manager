@@ -16,9 +16,8 @@ function FoodLine({ item }: { item: FoodWorkItem }) {
   return (
     <li className={styles.item}>
       <div className={styles.itemMain}>
-        <span className={styles.tableCode}>{item.tableCode}</span>
         <div className={styles.itemCopy}>
-          <h2>{item.name}</h2>
+          <h3>{item.name}</h3>
           {options && <p>{options}</p>}
         </div>
       </div>
@@ -36,9 +35,8 @@ function FoodLine({ item }: { item: FoodWorkItem }) {
           <input type="hidden" name="expected_status_id" value={item.statusId} />
           <input type="hidden" name="target_status_id" value={item.nextStatusId ?? ""} />
           <button type="submit" className={styles.actionButton} disabled={pending}>
-
             {pending ? "กำลังบันทึก" : item.nextStatusLabel}
-</button>
+          </button>
         </form>
       ) : (
         <span className={styles.terminalLabel}><Check size={17} strokeWidth={1.75} aria-hidden="true" />สถานะสุดท้าย</span>
@@ -58,9 +56,28 @@ export default function KitchenBoard({ items }: { items: FoodWorkItem[] }) {
     );
   }
 
+  const tables = new Map<string, FoodWorkItem[]>();
+  for (const item of items) {
+    const lines = tables.get(item.tableCode);
+    if (lines) lines.push(item);
+    else tables.set(item.tableCode, [item]);
+  }
+
   return (
-    <ul className={styles.board} aria-label="รายการอาหารในครัว">
-      {items.map((item) => <FoodLine key={item.id} item={item} />)}
+    <ul className={styles.board} aria-label="รายการอาหารแยกตามโต๊ะ">
+      {Array.from(tables, ([tableCode, lines]) => (
+        <li key={tableCode} className={styles.tableGroup}>
+          <section aria-labelledby={"kitchen-table-" + tableCode}>
+            <header className={styles.tableHeading}>
+              <h2 id={"kitchen-table-" + tableCode}>โต๊ะ <span className={styles.tableCode}>{tableCode}</span></h2>
+              <p>{lines.length} รายการ</p>
+            </header>
+            <ul className={styles.tableItems} aria-label={"อาหารโต๊ะ " + tableCode}>
+              {lines.map(item => <FoodLine key={item.id} item={item} />)}
+            </ul>
+          </section>
+        </li>
+      ))}
     </ul>
   );
 }
