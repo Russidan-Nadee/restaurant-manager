@@ -209,3 +209,54 @@ portion surcharge in a separate ตัวเลือกอาหาร column, 
 width. Use muted text when neither is enabled and red text for the surcharge.
 Configuration remains in the existing edit dialog; never enable choices on
 live menus without the owner's instruction.
+
+## Configurable table and food statuses — 2026-10-29
+
+This replaces the earlier read-only kitchen and inferred cashier occupancy rules.
+Admin navigation includes Status at /admin/statuses, managing table and food
+workflows separately. Use ordered lists, clear required-state labels and native
+add/remove dialogs. Keep operational controls at least 44px. Hide internal keys.
+Keep required table ว่าง/มีลูกค้า and food รอทำ/พร้อมเสิร์ฟ; no กำลังทำ.
+Optional เสิร์ฟแล้ว is the seeded final food step. Custom table steps follow
+มีลูกค้า and cycle back to ว่าง; the final active food step completes a line.
+
+Kitchen shows actionable food lines with table number, dish, actual selected
+options, quantity, current state and next-state button. Cashier shows actual table
+states, the current-visit total and food items for monitoring only. All food-state
+controls stay in the kitchen. Food completion does not free the table. Cashier
+confirms manual receipt only after all food is complete; payment closes the visit
+and immediately frees the table. Show a native confirmation with the actual total.
+Avoid placeholder option descriptions on dishes without selected options.
+
+### Cashier top view — 2026-10-29
+
+Represent each actual table using an original CSS overhead tabletop with decorative
+chairs, inspired only by the supplied reference's perspective. Use our cream,
+white, tomato red and navy palette. Free tables are cream; occupied/custom active
+states use red. Put the immutable table number on the tabletop, with actual status
+and current-visit total below. Chair geometry is decorative, not a configured seat
+count or a statement about real floor positions. No Shutterstock assets are bundled.
+
+Selecting an occupied table opens its bill for monitoring and checkout. Free
+tables are disabled. Keep food-state updates in the kitchen. One bill dialog
+handles details and payment confirmation, with native focus and scroll restoration.
+Use two columns on phones, fluid columns on desktop and 44px-plus targets.
+
+### Cashier bill hierarchy
+
+Only occupied tables open details; free top-view tables are disabled and keep
+their normal appearance. Do not show the มีลูกค้า label inside the dialog.
+Use one native dialog for bill review and payment confirmation. Place food lines
+first, in aligned item/quantity/line-total columns using actual stored subtotals.
+Dish names and quantities have higher emphasis than options and food status.
+Keep the table number prominent in a fixed header and the actual grand total plus
+primary action in a fixed footer, while only the bill lines scroll. Hide optional
+table-state actions under a secondary disclosure. Payment confirmation replaces
+the footer controls in place, retains the explicit receipt acknowledgement and
+freezes the reviewed visit/token/amount for stale-change protection. On phones,
+use a bottom sheet with a safe-area-aware footer. No generic kitchen/payment
+explanation below the floor map.
+
+On short landscape viewports, allow the whole dialog to scroll so confirmations
+and errors cannot clip bottom controls. Closing after payment returns focus to
+the table list when the original table button is now disabled.

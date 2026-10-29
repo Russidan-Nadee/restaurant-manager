@@ -7,6 +7,7 @@ const sections = [
   { href: "/admin", label: "Overview" },
   { href: "/admin/menu", label: "Menu" },
   { href: "/admin/tables", label: "Table" },
+  { href: "/admin/statuses", label: "Status" },
   { href: "/admin/employees", label: "Employee" },
 ];
 

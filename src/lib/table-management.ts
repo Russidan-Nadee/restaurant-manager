@@ -51,13 +51,14 @@ export async function retireDiningTable(form: FormData): Promise<string> {
   const client = await getDatabase().connect();
   try {
     await client.query("BEGIN");
+    await client.query("SELECT pg_advisory_xact_lock(16300509)");
     const selected = await client.query<{ name: string }>("SELECT name FROM restaurant_tables WHERE id = $1 AND is_active = true FOR UPDATE", [id]);
     if (!selected.rows[0]) throw new TableInputError("โต๊ะนี้ไม่มีอยู่ในรายการแล้ว กรุณาโหลดหน้าใหม่");
     const pending = await client.query<{ occupied: boolean }>(
-      "SELECT EXISTS (SELECT 1 FROM orders WHERE table_id = $1 AND status = ANY($2::text[])) AS occupied",
-      [id, ["placed", "preparing", "ready"]],
+      "SELECT EXISTS (SELECT 1 FROM table_sessions WHERE table_id = $1 AND closed_at IS NULL) AS occupied",
+      [id],
     );
-    if (pending.rows[0].occupied) throw new TableInputError("ลบโต๊ะไม่ได้ เพราะยังมีออร์เดอร์ค้างอยู่");
+    if (pending.rows[0].occupied) throw new TableInputError("ลบโต๊ะไม่ได้ เพราะยังมีรอบลูกค้าที่ไม่ปิด");
     await client.query("UPDATE restaurant_tables SET is_active = false WHERE id = $1", [id]);
     await client.query("COMMIT");
     return selected.rows[0].name;

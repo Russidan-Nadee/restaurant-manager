@@ -165,3 +165,72 @@ and installed order-function body match the repository. All 12 existing menus
 had options disabled at inspection time; no live menu settings were changed.
 ESLint and TypeScript were checked. No unit tests, build or browser/order flow
 were run; review unit-test cases with the owner before adding tests.
+
+## Table and food workflows
+
+Configure statuses in /admin/statuses. Required table states are ว่าง and
+มีลูกค้า; required food states are รอทำ and พร้อมเสิร์ฟ. Optional เสิร์ฟแล้ว
+starts as the final food state. There is no กำลังทำ state.
+
+Add custom steps after an existing step and use the arrows to reorder them.
+Table steps follow มีลูกค้า and eventually return to ว่าง. Food starts at
+รอทำ and ends at the final configured step; เสิร์ฟแล้ว stays last while enabled.
+Required states cannot be removed. A status currently assigned to an active
+table/food line cannot be removed. Removal retains historical references.
+Food workflow changes require no unfinished food; changes to the final step
+also require closing visits that still use that final step.
+
+The first successful customer order opens a visit automatically. Additional
+orders join the same visit. Free tables cannot be selected in /cashier. Food
+lines advance independently in /kitchen; cashier only monitors their states.
+Kitchen hides completed food lines; cashier retains them until the visit closes.
+Live refresh runs every five seconds.
+
+Food completion does not free the table. Cashier shows the total of all orders
+in the current visit. Once all food is complete, choose ชำระเงิน and confirm
+receipt of the displayed amount. This records payment, closes the visit and
+immediately makes the table free, including from a custom table state. Orders are
+rejected during custom post-service table states until the table is free again.
+Retiring a table requires its visit to be closed, even if all food is complete.
+
+Migration 005_workflow_statuses.sql introduces status definitions, table visits,
+per-food state IDs and a rotating table-state token. Existing pending orders
+are grouped into visits; legacy preparing is mapped to waiting. The migration
+preserves migration004's authoritative price/option/snapshot function and wraps
+it atomically. State/session/token checks reject stale or repeated transitions.
+
+Authentication, payment-gateway integration, cancellations, undo and splitting a food line's
+quantity into separate serving states are outside this change. No mock business
+records or new dependencies are needed. Review unit-test cases with the owner
+before introducing tests for status protection, stale forms and visit closure.
+
+Workflow rollout on 2026-10-29: migration005 was applied first on the temporary
+workflow-statuses-20261029 branch and then production. Its checksum and required
+schema/states were read back successfully. The temporary branch expires at
+2026-10-29T05:53:15Z. ESLint and TypeScript exited 0; independent source review
+approved the integration. No build, browser flow or automated tests were run.
+
+### Manual payment records
+
+Migration006 adds table_payments, with one immutable payment record per visit.
+No payment records are seeded or inferred for previously closed visits. The
+checkout transaction rechecks the current visit, rotating state token, final food
+states and authoritative DB total. It rejects stale/duplicate payments or changed
+amounts without closing the table. Money comparison uses integer cents, and the
+display retains exact decimal precision. Zero-total visits are allowed.
+
+Confirm only after receiving payment. This is a manual receipt acknowledgement;
+no gateway request, bank transfer or card charge is performed. Ordinary table-state
+actions cannot bypass payment to return an occupied table to free. Pending food
+blocks checkout in both UI and server. Closed/paid order history remains intact.
+
+Payment rollout on 2026-10-29: migration006 was applied on the temporary branch
+and production. Its checksum, five columns and unique visit constraint were
+read back successfully. Lint/types and independent source review passed. No
+sample receipts, unit tests, build or browser checkout flow were run.
+
+The cashier uses themed top-view tables. Selecting an occupied table opens one
+bill dialog with actual line totals, a scrolling receipt and bottom total/actions.
+Options and food statuses are secondary. Free tables are disabled. Confirmation
+stays in the same dialog; short screens can scroll to all controls. No browser
+flow or build was run; final lint and TypeScript checks exited 0.

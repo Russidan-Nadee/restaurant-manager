@@ -98,3 +98,29 @@ The owner requested a stronger red/white restaurant style. The homepage, custome
 - Retirement checks placed/preparing/ready under the same row lock used by order placement, preserving order history and preventing races.
 - npm run db:migrate applied 003 to the configured Neon database. No fixture tables were created.
 - No tests/build/type checks or live create/rename/retire flow were run under the existing user instruction. Future unit cases should be reviewed with the owner first.
+
+## Configurable workflow and table visits — 2026-10-29
+
+- /admin/statuses adds/removes/reorders custom table and food states.
+- Required states are protected; active references block deletion and historical
+  references survive soft deletion. Food-step changes cannot disrupt unfinished
+  tickets or replace a final step still used by an open visit.
+- Migration005 adds explicit table_sessions and per-food status IDs. Repeated
+  orders join the open visit. Table state is independent of food completion.
+- /kitchen and /cashier offer per-food next-state actions; cashier also opens,
+  advances and closes table visits. Pending food prevents advancing out of the
+  occupied table cycle. Retiring an open-visit table is prohibited.
+- Expected current/next state, visit ID and rotating table-state token reject
+  stale/replayed requests. Shared transaction locking serializes changes.
+- No payment, cancellation, undo, authentication or partial line serving in scope.
+
+## Cashier payment correction — 2026-10-29
+
+- Food-state controls are exclusively in /kitchen; cashier food rows are readonly.
+- Cashier sums only current-visit order totals and confirms manual receipt in a
+  dialog. All food must be at the final active step first (owner confirmed).
+- Migration006 adds unique per-visit THB payment records without fixtures.
+- Payment, paid order labels, visit closure and free table/token update are atomic.
+- Expected visit/token/amount reject stale or repeated payment requests. Generic
+  table transitions cannot close unpaid visits. Zero-total visits are supported.
+- Gateway integration and actual electronic charges remain outside this change.

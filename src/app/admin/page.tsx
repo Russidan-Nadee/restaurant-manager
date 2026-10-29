@@ -8,9 +8,9 @@ export const runtime = "nodejs";
 type Summary = { today_orders: number; waiting_orders: number; active_menu: number; tables: number };
 type RecentOrder = {
   id: string; table_name: string; status: string; created_at: Date;
-  items: { name: string; quantity: number; protein: string | null; is_special: boolean }[];
+  items: { name: string; quantity: number; protein: string | null; is_special: boolean; status_label: string }[];
 };
-const statusLabels: Record<string, string> = { placed: "รอรับออร์เดอร์", preparing: "กำลังทำ", ready: "พร้อมเสิร์ฟ" };
+const statusLabels: Record<string, string> = { placed: "รอทำ", ready: "พร้อมเสิร์ฟ", served: "จบรายการแล้ว", closed: "ปิดโต๊ะแล้ว", paid: "ชำระเงินแล้ว" };
 
 export default async function AdminOverviewPage() {
   const database = getDatabase();
@@ -26,9 +26,10 @@ export default async function AdminOverviewPage() {
     database.query<RecentOrder>(
       "SELECT o.id, t.name AS table_name, o.status, o.created_at, " +
       "jsonb_agg(jsonb_build_object(\'name\', i.name_snapshot, \'quantity\', i.quantity, " +
-      "\'protein\', i.protein_snapshot, \'is_special\', i.is_special) ORDER BY i.created_at, i.id) AS items " +
+      "\'protein\', i.protein_snapshot, \'is_special\', i.is_special, \'status_label\', st.label) ORDER BY i.created_at, i.id) AS items " +
       "FROM (SELECT id, table_id, status, created_at FROM orders ORDER BY created_at DESC, id DESC LIMIT 10) o " +
       "JOIN restaurant_tables t ON t.id = o.table_id JOIN order_items i ON i.order_id = o.id " +
+      "JOIN restaurant_statuses st ON st.id = i.status_id " +
       "GROUP BY o.id, t.name, o.status, o.created_at ORDER BY o.created_at DESC, o.id DESC",
     ),
   ]);
@@ -68,6 +69,7 @@ export default async function AdminOverviewPage() {
                 <td className={styles.mobileFull} data-label="รายการอาหาร"><ul className={styles.orderItems}>
                   {order.items.map((item, index) => <li key={index}><strong>{item.quantity}</strong> × {item.name}
                     {(item.protein || item.is_special) && <span> ({[item.protein, item.is_special ? "พิเศษ" : null].filter(Boolean).join(" · ")})</span>}
+                    <span> — {item.status_label}</span>
                   </li>)}
                 </ul></td>
                 <td className={styles.orderStatus} data-label="สถานะ">{statusLabels[order.status] ?? order.status}</td>
