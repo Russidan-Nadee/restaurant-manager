@@ -193,12 +193,12 @@ were run; review unit-test cases with the owner before adding tests.
 ## Table and food workflows
 
 Configure statuses in /admin/statuses. Required table states are ว่าง and
-มีลูกค้า; required food states are รอทำ and พร้อมเสิร์ฟ. Optional เสิร์ฟแล้ว
-starts as the final food state. There is no กำลังทำ state.
+มีลูกค้า; required food states are รอทำ and พร้อมเสิร์ฟ. The default food flow
+ends at พร้อมเสิร์ฟ. There is no กำลังทำ or active เสิร์ฟแล้ว step.
 
 Add custom steps after an existing step and use the arrows to reorder them.
 Table steps follow มีลูกค้า and eventually return to ว่าง. Food starts at
-รอทำ and ends at the final configured step; เสิร์ฟแล้ว stays last while enabled.
+รอทำ and ends at the final configured step.
 Required states cannot be removed. A status currently assigned to an active
 table/food line cannot be removed. Removal retains historical references.
 Food workflow changes require no unfinished food; changes to the final step
@@ -272,3 +272,10 @@ future backend; no fake staff records are seeded into Neon. Other operational
 pages retain their actual database connections. Lint and TypeScript passed;
 no unit tests, build or browser flow were run. Review future unit-test cases with
 the owner before adding tests.
+
+### Food add-on configuration
+
+Migration 008 enables chicken, pork, beef, shrimp and squid choices plus the
+existing THB 10 special serving on current food menus. น้ำแข็ง and น้ำเปล่า
+have neither option. Base prices, images and historical orders are unchanged;
+future menus remain individually configurable in admin.

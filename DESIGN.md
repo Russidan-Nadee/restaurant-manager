@@ -253,8 +253,9 @@ Admin navigation includes Status at /admin/statuses, managing table and food
 workflows separately. Use ordered lists, clear required-state labels and native
 add/remove dialogs. Keep operational controls at least 44px. Hide internal keys.
 Keep required table ว่าง/มีลูกค้า and food รอทำ/พร้อมเสิร์ฟ; no กำลังทำ.
-Optional เสิร์ฟแล้ว is the seeded final food step. Custom table steps follow
-มีลูกค้า and cycle back to ว่าง; the final active food step completes a line.
+The default food flow ends at พร้อมเสิร์ฟ; เสิร์ฟแล้ว has been removed from the
+active flow. Custom table steps follow มีลูกค้า and cycle back to ว่าง; the final
+active food step completes a line.
 
 Kitchen shows actionable food lines with table number, dish, actual selected
 options, quantity, current state and next-state button. Cashier shows actual table

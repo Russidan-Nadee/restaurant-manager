@@ -24,13 +24,12 @@ function defaultAfterId(statuses: WorkflowStatus[], scope: StatusScope) {
 function addOptions(statuses: WorkflowStatus[], scope: StatusScope) {
   return sortStatuses(statuses, scope).filter((status) => {
     if (scope === "table") return status.code === "occupied" || status.code === null;
-    return status.code !== "served";
+    return true;
   });
 }
 
 function canSwap(status: WorkflowStatus, neighbor: WorkflowStatus | undefined) {
   if (!neighbor) return false;
-  if (neighbor.code === "served") return false;
   if (!neighbor.isRequired) return true;
   return status.scope === "food" && neighbor.code === "ready";
 }
@@ -243,7 +242,7 @@ function StatusRow({ status, statuses }: { status: WorkflowStatus; statuses: Wor
           <strong>{status.label}</strong>
           {locked && <span className={styles.requiredBadge}><LockKeyhole size={14} strokeWidth={1.75} aria-hidden="true" />จำเป็น</span>}
         </div>
-        <p>{status.isRequired ? "สถานะหลัก" : status.code === "served" ? "สถานะเสริม" : "สถานะกำหนดเอง"}</p>
+        <p>{status.isRequired ? "สถานะหลัก" : "สถานะกำหนดเอง"}</p>
       </div>
       <div className={styles.statusMeta}>
         <span className={status.isTerminal ? styles.terminalBadge : styles.cycleBadge}>

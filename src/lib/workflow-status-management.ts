@@ -147,15 +147,9 @@ function defaultInsertIndex(scope: StatusScope, rows: WorkflowStatusRow[]): numb
   if (scope === "table") return rows.length;
 
   const readyIndex = rows.findIndex((row) => row.code === "ready");
-  const servedIndex = rows.findIndex((row) => row.code === "served");
-  const desiredIndex = readyIndex >= 0 ? readyIndex + 1 : rows.length;
-  return servedIndex >= 0 ? Math.min(desiredIndex, servedIndex) : desiredIndex;
+  return readyIndex >= 0 ? readyIndex + 1 : rows.length;
 }
 
-function foodInsertIsBeforeServed(rows: WorkflowStatusRow[], insertionIndex: number): boolean {
-  const servedIndex = rows.findIndex((row) => row.code === "served");
-  return servedIndex < 0 || insertionIndex <= servedIndex;
-}
 
 async function statusIsInUse(client: PoolClient, scope: StatusScope, id: string): Promise<boolean> {
   if (scope === "table") {
@@ -252,15 +246,12 @@ export async function addWorkflowStatus(form: FormData): Promise<void> {
           throw new WorkflowInputError(
             scope === "table"
               ? "สถานะโต๊ะใหม่ต้องอยู่หลังสถานะว่างและมีลูกค้า"
-              : "สถานะอาหารใหม่ต้องอยู่หลังสถานะรอทำและก่อนเสิร์ฟ",
+              : "ตำแหน่งสถานะอาหารไม่ถูกต้อง กรุณาโหลดหน้าใหม่",
           );
         }
         insertionIndex = anchorIndex + 1;
       }
 
-      if (scope === "food" && !foodInsertIsBeforeServed(rows, insertionIndex)) {
-        throw new WorkflowInputError("สถานะอาหารใหม่ต้องอยู่ก่อนสถานะเสิร์ฟ");
-      }
       if (scope === "food" && insertionIndex === rows.length) {
         const finalStatus = rows[rows.length - 1];
         if (finalStatus && (await statusIsInUse(client, scope, finalStatus.id))) {
@@ -330,9 +321,6 @@ export async function moveWorkflowStatus(form: FormData): Promise<void> {
   await withWorkflowTransaction(async (client) => {
     const selected = await findActiveStatus(client, id);
     if (!selected) throw new WorkflowInputError("ไม่พบสถานะที่ต้องการจัดลำดับ กรุณาโหลดหน้าใหม่");
-    if (selected.code === "served") {
-      throw new WorkflowInputError("สถานะเสิร์ฟต้องอยู่ท้ายรายการและไม่สามารถย้ายได้");
-    }
     if (selected.code !== null || selected.is_required) {
       throw new WorkflowInputError("ไม่สามารถย้ายสถานะเริ่มต้นของระบบได้");
     }
@@ -358,7 +346,7 @@ export async function moveWorkflowStatus(form: FormData): Promise<void> {
       throw new WorkflowInputError(
         selected.scope === "table"
           ? "สถานะโต๊ะเริ่มต้นต้องอยู่ด้านบนและไม่สามารถสลับตำแหน่งได้"
-          : "สถานะอาหารนี้ไม่สามารถย้ายข้ามสถานะรอทำหรือเสิร์ฟได้",
+          : "สถานะอาหารนี้ไม่สามารถย้ายข้ามสถานะรอทำได้",
       );
     }
     if (selected.scope === "food" && (selectedIndex === rows.length - 1 || neighborIndex === rows.length - 1)) {

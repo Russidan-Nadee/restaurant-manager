@@ -37,7 +37,7 @@ function FoodLine({ item }: { item: FoodWorkItem }) {
           <input type="hidden" name="target_status_id" value={item.nextStatusId ?? ""} />
           <button type="submit" className={styles.actionButton} disabled={pending}>
 
-            {pending ? "กำลังบันทึก" : `ไปที่ ${item.nextStatusLabel}`}
+            {pending ? "กำลังบันทึก" : item.nextStatusLabel}
 </button>
         </form>
       ) : (

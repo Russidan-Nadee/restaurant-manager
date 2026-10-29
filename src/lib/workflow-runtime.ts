@@ -48,7 +48,7 @@ export async function advanceFood(form: FormData): Promise<void> {
     const readyIndex = flow.findIndex(status => status.code === "ready");
     const complete = orderItems.rows.every(line => line.status_id === final.id);
     const allReady = orderItems.rows.every(line => flow.findIndex(status => status.id === line.status_id) >= readyIndex);
-    await client.query("UPDATE orders SET status = $2 WHERE id = $1", [item.order_id, complete ? "served" : allReady ? "ready" : "placed"]);
+    await client.query("UPDATE orders SET status = $2 WHERE id = $1", [item.order_id, complete && final.code !== "ready" ? "served" : allReady ? "ready" : "placed"]);
   });
 }
 

@@ -112,3 +112,47 @@
   .dialogHeading .price { font-size: 17px; }
 }
 @media (max-width: 360px) { .menu { grid-template-columns: minmax(0, 1fr); } }
+
+.reviewDialog { width: min(600px, calc(100% - 40px)); max-width: 600px; max-height: 90svh; margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 28px; background: var(--restaurant-paper); color: var(--restaurant-ink); box-shadow: 0 24px 80px #14203340; }
+.reviewDialog[open] { display: flex; flex-direction: column; }
+.reviewDialog::backdrop { background: #14203399; }
+.reviewHeader { display: flex; flex: 0 0 auto; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 24px; border-bottom: 1px solid var(--restaurant-rule); }
+.reviewHeader h2 { margin: 4px 0; font-size: 23px; font-weight: 650; line-height: 1.5; }
+.reviewHeader p { margin: 0; color: var(--restaurant-muted); font-size: 14px; line-height: 1.8; }
+.reviewHeader p:first-child { color: var(--restaurant-red); font-size: 16px; font-weight: 650; }
+.reviewClose { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--restaurant-rule); border-radius: 50%; background: white; color: var(--restaurant-ink); cursor: pointer; }
+.reviewBody { flex: 1 1 auto; min-height: 0; padding: 8px 24px; overflow-y: auto; overscroll-behavior: contain; }
+.reviewColumns, .reviewLine { display: grid; grid-template-columns: minmax(0, 1fr) minmax(44px, auto) minmax(90px, auto); align-items: start; gap: 14px; }
+.reviewColumns { padding: 12px 0; color: var(--restaurant-muted); font-size: 12px; }
+.reviewColumns span:not(:first-child) { text-align: right; }
+.reviewList { margin: 0; padding: 0; list-style: none; }
+.reviewLine { padding: 18px 0; border-top: 1px solid var(--restaurant-rule); }
+.reviewDish { min-width: 0; overflow-wrap: anywhere; }
+.reviewDish h3 { margin: 0; font-size: 16px; font-weight: 650; line-height: 1.7; }
+.reviewDish p, .reviewDish > span { margin: 4px 0 0; color: var(--restaurant-muted); font-size: 13px; line-height: 1.7; }
+.reviewQuantity, .reviewAmount { padding-top: 2px; font-size: 15px; line-height: 1.7; text-align: right; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.reviewQuantity { font-weight: 650; }
+.reviewAmount { font-weight: 600; }
+.reviewFooter { flex: 0 0 auto; padding: 20px 24px calc(24px + env(safe-area-inset-bottom)); border-top: 1px solid var(--restaurant-rule); background: var(--restaurant-paper); }
+.reviewTotal { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.reviewTotal span { font-size: 16px; font-weight: 600; }
+.reviewTotal small { display: block; margin-top: 4px; color: var(--restaurant-muted); font-size: 12px; }
+.reviewTotal strong { color: var(--restaurant-red); font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.reviewActions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px; margin-top: 20px; }
+.reviewActions button { min-height: 50px; border-radius: 16px; padding: 12px; }
+.reviewBack { border: 1px solid var(--restaurant-rule); background: white; color: var(--restaurant-ink); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.reviewBack:disabled, .reviewClose:disabled { opacity: .45; cursor: default; }
+.reviewProgress { margin: 12px 0 0; color: var(--restaurant-muted); font-size: 13px; line-height: 1.8; }
+.reviewDialog button:focus-visible { outline: 2px solid var(--restaurant-red); outline-offset: 3px; }
+@media (max-width: 600px) {
+  .reviewDialog { width: 100%; max-width: none; max-height: 92svh; margin: auto auto 0; border-radius: 26px 26px 0 0; }
+  .reviewHeader { padding: 20px; }
+  .reviewBody { padding: 4px 20px; }
+  .reviewFooter { padding: 18px 20px calc(20px + env(safe-area-inset-bottom)); }
+  .reviewColumns, .reviewLine { grid-template-columns: minmax(0, 1fr) 44px minmax(76px, auto); gap: 10px; }
+  .reviewAmount { font-size: 14px; }
+}
+@media (max-height: 540px) {
+  .reviewDialog[open] { display: block; overflow-y: auto; }
+  .reviewBody { overflow: visible; }
+}

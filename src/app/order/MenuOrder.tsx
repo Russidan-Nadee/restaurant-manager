@@ -3,6 +3,7 @@
 import RestaurantBrand from "@/components/RestaurantBrand";
 import { useRef, useState } from "react";
 import MenuItemImage from "./MenuItemImage";
+import OrderReviewDialog from "./OrderReviewDialog";
 import MenuItemDialog, { MAX_ITEM_QUANTITY } from "./MenuItemDialog";
 import { Armchair, Check, Minus, Plus, Send } from "lucide-react";
 import { placeOrder } from "@/lib/orders";
@@ -22,6 +23,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
   const [error, setError] = useState("");
   const [confirmedOrder, setConfirmedOrder] = useState("");
   const sending = useRef(false);
+  const [reviewItems, setReviewItems] = useState<CartItem[] | null>(null);
   const [dialogTrigger, setDialogTrigger] = useState<HTMLButtonElement | null>(null);
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0);
   const totalCents = cart.reduce((total, item) => total + Math.round(item.price * 100) * item.quantity, 0);
@@ -65,16 +67,30 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
     setConfirmedOrder("");
   }
 
-  async function submitOrder() {
+  function reviewOrder(trigger: HTMLButtonElement) {
     if (sending.current || selectedItem || cart.length === 0) return;
+    setDialogTrigger(trigger);
+    setError("");
+    setReviewItems(cart.map(item => ({ ...item })));
+  }
+
+  function closeReview() {
+    if (sending.current) return;
+    setReviewItems(null);
+    setError("");
+  }
+
+  async function submitOrder() {
+    if (sending.current || selectedItem || !reviewItems?.length) return;
     sending.current = true;
     setSubmitting(true);
     setError("");
     setConfirmedOrder("");
     try {
-      const id = await placeOrder(table.id, cart);
+      const id = await placeOrder(table.id, reviewItems);
       setConfirmedOrder(id);
       setCart([]);
+      setReviewItems(null);
     } catch {
       setError("ส่งออร์เดอร์ไม่สำเร็จ กรุณาตรวจสอบรายการแล้วลองใหม่");
     } finally {
@@ -99,7 +115,7 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
         {confirmedOrder && <p className={styles.success} role="status">
           <Check size={20} strokeWidth={1.75} aria-hidden="true" />ส่งออร์เดอร์เข้าครัวแล้ว
         </p>}
-        {error && <p className={styles.error} role="alert">{error}</p>}
+        {error && !reviewItems && <p className={styles.error} role="alert">{error}</p>}
 
         <ul className={styles.menu} aria-label="เมนูที่เปิดขาย">
           {menu.map(item => {
@@ -149,16 +165,17 @@ export default function MenuOrder({ table, menu }: { table: DiningTable; menu: C
         </section>}
 
         {menu.length > 0 && <footer className={styles.summary}>
-          <div>
+          <div data-order-summary tabIndex={-1} aria-label="สรุปออร์เดอร์">
             <p aria-live="polite" aria-atomic="true">{itemCount} รายการ</p>
             <strong>{formatMoney(totalCents)}</strong>
           </div>
-          <button type="button" className={styles.submit} disabled={itemCount === 0 || submitting} onClick={submitOrder}>
+          <button type="button" className={styles.submit} aria-haspopup="dialog" disabled={itemCount === 0 || submitting} onClick={event => reviewOrder(event.currentTarget)}>
             <Send size={20} strokeWidth={1.75} aria-hidden="true" />
             {submitting ? "กำลังส่งออร์เดอร์" : "ส่งออร์เดอร์"}
           </button>
         </footer>}
       </div>
+      {reviewItems && <OrderReviewDialog tableNumber={table.name} items={reviewItems} submitting={submitting} error={error} trigger={dialogTrigger} onClose={closeReview} onConfirm={submitOrder} />}
       {selectedItem && <MenuItemDialog key={selectedItem.id} item={selectedItem} trigger={dialogTrigger} disabled={submitting} onClose={() => setSelectedItem(null)} onConfirm={addItem} />}
     </main>
   );
