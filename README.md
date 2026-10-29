@@ -140,3 +140,28 @@ and the order function rejects stale submissions. There is no restore UI yet.
 
 Migration 003 was applied with npm run db:migrate. No new tables were inserted on
 the owner's behalf, and no tests/build or create/rename/retire UI flow was run.
+
+## Food options
+
+Open /admin/menu, choose แก้ไข for a dish, then select its available proteins
+(ไก่, หมู, เนื้อ, กุ้ง, หมึก) and optionally enable พิเศษ +10 บาทต่อจาน.
+Protein choices use the menu's base price. These settings are independent for
+each menu, so water and ice can remain without options. The menu list summarizes
+the saved choices; ไม่มีตัวเลือกเพิ่มเติม means neither option is enabled.
+Existing menus are not automatically opted in.
+
+Customers press + on /order/<table-code> to open an options dialog (a bottom
+sheet on mobile). A configured protein is required; special is optional.
+Identical choices merge in the cart, while different proteins or portion sizes
+stay on separate lines. Quantity can be adjusted before sending.
+
+The database validates the current menu availability, allowed options and price
+atomically. Order items retain protein, portion and surcharge snapshots for the
+kitchen and recent-order overview. Migration 004_menu_options.sql is already
+applied on the configured Neon database; do not edit an applied migration.
+
+Read-only inspection on 2026-10-29 confirmed its checksum, five option columns
+and installed order-function body match the repository. All 12 existing menus
+had options disabled at inspection time; no live menu settings were changed.
+ESLint and TypeScript were checked. No unit tests, build or browser/order flow
+were run; review unit-test cases with the owner before adding tests.

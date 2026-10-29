@@ -72,3 +72,8 @@
   .availability { gap: 8px; }
   .fields input:not([type=checkbox]):not([type=hidden]), .fields textarea { font-size: 16px; }
 }
+
+.optionSummary { min-width: 140px; max-width: 260px; margin: 0; padding: 0; list-style: none; font-size: 12px; line-height: 1.8; overflow-wrap: anywhere; }
+.optionSummary li + li { margin-top: 4px; }
+.specialSummary { color: var(--restaurant-red); font-weight: 600; }
+.noOptions { color: var(--restaurant-muted); font-size: 12px; }

@@ -201,3 +201,11 @@ a pause control and keep content available before JavaScript loads. Pause
 continuous animation while the document is hidden.
 
 No unit tests were added or run at the owner's request for this change.
+
+### Food-option management
+
+The admin menu list displays each menu's saved protein choices and special
+portion surcharge in a separate ตัวเลือกอาหาร column, spanning the mobile card
+width. Use muted text when neither is enabled and red text for the surcharge.
+Configuration remains in the existing edit dialog; never enable choices on
+live menus without the owner's instruction.

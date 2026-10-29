@@ -4,11 +4,23 @@ import { useOptimistic, useState, useTransition } from "react";
 import Image from "next/image";
 import { setMenuAvailabilityAction } from "./actions";
 import MenuEditor from "./MenuEditor";
+import { PROTEIN_OPTIONS, SPECIAL_PRICE } from "@/lib/menu-options";
 import type { AdminMenuItem } from "./types";
 import admin from "../page.module.css";
 import styles from "./menu.module.css";
 
 const money = new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" });
+
+function MenuOptionsSummary({ item }: { item: AdminMenuItem }) {
+  const proteins = PROTEIN_OPTIONS.filter(option => item.protein_options.includes(option.id));
+  if (proteins.length === 0 && !item.special_available) {
+    return <span className={styles.noOptions}>ไม่มีตัวเลือกเพิ่มเติม</span>;
+  }
+  return <ul className={styles.optionSummary} aria-label={"ตัวเลือกอาหารของ " + item.name}>
+    {proteins.length > 0 && <li>เลือกเนื้อสัตว์: {proteins.map(option => option.label).join(" / ")}</li>}
+    {item.special_available && <li className={styles.specialSummary}>พิเศษ +{SPECIAL_PRICE} บาทต่อจาน</li>}
+  </ul>;
+}
 
 function AvailabilityControl({ item, disabled }: { item: AdminMenuItem; disabled: boolean }) {
   const [active, setActive] = useOptimistic(item.is_active);
@@ -59,7 +71,8 @@ export default function MenuManager({ items }: { items: AdminMenuItem[] }) {
         <table className={[admin.table, admin.responsiveTable].join(" ")}>
           <thead><tr>
             <th scope="col">เมนู</th><th scope="col">หมวดหมู่</th>
-            <th scope="col" className={admin.numeric}>ราคา</th><th scope="col">สถานะ</th><th scope="col">จัดการ</th>
+            <th scope="col" className={admin.numeric}>ราคา</th><th scope="col">ตัวเลือกอาหาร</th>
+            <th scope="col">สถานะ</th><th scope="col">จัดการ</th>
           </tr></thead>
           <tbody>{items.map(item => <tr key={item.id}>
             <th scope="row"><div className={styles.item}>
@@ -68,6 +81,7 @@ export default function MenuManager({ items }: { items: AdminMenuItem[] }) {
             </div></th>
             <td data-label="หมวดหมู่">{item.category ?? "—"}</td>
             <td className={admin.numeric} data-label="ราคา">{money.format(item.price)}</td>
+            <td className={admin.mobileFull} data-label="ตัวเลือกอาหาร"><MenuOptionsSummary item={item} /></td>
             <td data-label="สถานะ"><AvailabilityControl item={item} disabled={editing} /></td>
             <td className={admin.mobileActions}><div className={styles.rowActions}>
               <button type="button" className={styles.secondary} disabled={editing} onClick={() => setEditor(item)} aria-label={"แก้ไข " + item.name}>แก้ไข</button>
