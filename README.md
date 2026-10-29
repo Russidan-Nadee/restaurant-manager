@@ -103,16 +103,17 @@ Contact buttons deliberately have no destination yet, as requested by the owner.
 No package price or domain/hosting arrangement has been fixed in the copy.
 
 The benefits section embeds the actual pages in lazy-loaded iframe previews:
-the homepage hero, the customer menu, the kitchen and admin menu management.
+the homepage hero, the cashier, the kitchen and admin menu management.
 All four previews share a landscape iPad frame at public/landing/ipad-landscape.png.
 The transparent screen overlays the actual iframe, so no screenshots are required.
 This frame was prepared with built-in imagegen from the owner's iPad Pro 2018
 mockup reference by Lstore Graphics. The original PSD files are not bundled.
 The homepage uses /?preview=1 to show only the header and hero so the page
-cannot embed itself recursively. /preview/menu redirects to the first active
-table's actual ordering page, or /order when no active table is configured.
+cannot embed itself recursively. The customer flow is reserved for later
+showcase work. The separate /preview/menu route still redirects to the first
+active table's ordering page, or /order when no active table is configured.
 Previews block scripts, form submission and interaction; links open each full
-page in a new tab. No orders or menu changes are submitted by the previews.
+page in a new tab. No orders, payments or menu changes are submitted by the previews.
 
 The four-card scroll story introduces the owners the service is for: new
 restaurants, established local favourites, social-first restaurants and owners

@@ -228,9 +228,11 @@ The benefits section uses the actual pages in lazy-loaded iframe previews,
 inside a landscape iPad mockup and a link to open each full page. Use only the
 landscape device, with a transparent screen aperture around the actual iframe;
 keep public/landing/ipad-landscape.png separate from page content. The first preview
-shows only the homepage header/hero to prevent recursive embeds. The menu preview
-resolves an active table dynamically. Previews show server-rendered content with
-scripts and form submission blocked, so they cannot place orders or edit menus.
+shows only the homepage header/hero to prevent recursive embeds. The remaining
+previews show cashier, kitchen and admin menu management. Reserve the customer
+ordering flow for later showcase work. Previews show server-rendered content
+with scripts and form submission blocked, so they cannot submit orders, payments
+or menu changes.
 The four-card scroll story describes the owners the service is for: opening a
 new restaurant, serving an established local following, connecting from social
 channels and building a distinct brand. Use Lucide illustrations, keeping the
@@ -294,6 +296,7 @@ explanation below the floor map.
 On short landscape viewports, allow the whole dialog to scroll so confirmations
 and errors cannot clip bottom controls. Closing after payment returns focus to
 the table list when the original table button is now disabled.
+
 
 ### Landing copy density
 
